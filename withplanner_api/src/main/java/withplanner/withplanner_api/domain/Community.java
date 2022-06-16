@@ -29,7 +29,8 @@ public class Community extends BaseTimeEntity{
 
     private Integer headCount;
 
-  //  private List<Day> days = new ArrayList<>();
+    @ElementCollection
+    private List<String> days =new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private Status status;
