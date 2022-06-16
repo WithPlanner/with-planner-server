@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-public class Comment {
+public class Comment extends BaseTimeEntity{
     @Id
     @GeneratedValue
     @Column(name="comment_idx")

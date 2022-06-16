@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class Post {
+public class Post extends BaseTimeEntity{
     @Id
     @GeneratedValue
     @Column(name="post_idx")
@@ -28,4 +28,12 @@ public class Post {
 
     @OneToMany(mappedBy = "post")
     private List<PostImg> images = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_idx")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "community_idx")
+    private Community community;
 }

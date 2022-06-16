@@ -16,4 +16,14 @@ public class MapPost extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_idx")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "community_idx")
+    private Community community;
+
+
 }

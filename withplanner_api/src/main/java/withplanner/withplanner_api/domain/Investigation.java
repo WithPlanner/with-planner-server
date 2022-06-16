@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-public class Investigation {
+public class Investigation extends BaseTimeEntity {
     @Id
     @GeneratedValue
     @Column(name="investigation_idx")
@@ -24,4 +24,8 @@ public class Investigation {
 
     @Enumerated(EnumType.STRING)
     private Status  status; //Enum - ACTIVE,  INACTIVE
+
+    @OneToOne(mappedBy = "investigation", fetch = FetchType.LAZY)
+    private User user;
+
 }

@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-public class communityMember {
+public class CommunityMember extends BaseTimeEntity {
     @Id
     @GeneratedValue
     @Column(name="community_member_idx")
@@ -16,12 +16,25 @@ public class communityMember {
 
     //fk userIdx
     //fk communityIdx
-    //joinAt
 
     @Enumerated(EnumType.STRING)
     private Status status;
 
     private Boolean authority; // true(방장)&false(멤버)
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_idx")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "community_idx")
+    private Community community;
+
+    @OneToOne(fetch=FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name= "map_idx")
+    private Map map;
+
+
 
 
 }
