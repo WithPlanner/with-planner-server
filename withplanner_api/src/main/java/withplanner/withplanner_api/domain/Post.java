@@ -16,9 +16,16 @@ public class Post {
     @Column(name="post_idx")
     private Long id;
 
+    private String name;
+
+    private String content;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments = new ArrayList<>();
 
-
+    @OneToMany(mappedBy = "post")
+    private List<PostImg> images = new ArrayList<>();
 }
