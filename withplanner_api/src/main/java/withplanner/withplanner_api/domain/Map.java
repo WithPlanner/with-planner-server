@@ -16,4 +16,13 @@ public class Map {
     @GeneratedValue
     @Column(name="map_idx")
     private Long id;
+
+    private String x ; //경도
+    private String y ; //위도
+
+    private Address address; //주소
+
+
+
+
 }
