@@ -8,15 +8,15 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-public class Comment extends BaseTimeEntity{
+public class Comment extends BaseTimeEntity {
     @Id
     @GeneratedValue
     @Column(name="comment_idx")
     private Long id;
     private String content;
     private Integer depth;
-    private Integer group;
-    private Integer order;
+    private Integer groups;
+    private Integer orders;
     private Integer parent;
 
     @Enumerated(EnumType.STRING)
