@@ -13,4 +13,9 @@ public class Address {
     private String baseAddress; //addr2 - 기본주소
     private String detailedAddress; //addr3 - 상세주소
 
+    public Address(String zipcode, String baseAddress, String detailedAddress) {
+        this.zipcode = zipcode;
+        this.baseAddress = baseAddress;
+        this.detailedAddress = detailedAddress;
+    }
 }

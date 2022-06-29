@@ -2,6 +2,7 @@ package withplanner.withplanner_api.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import withplanner.withplanner_api.dto.UserRequestDto;
 
 
 import javax.persistence.*;
@@ -55,5 +56,12 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user")
     private List<CommunityMember> communityMembers= new ArrayList<>();
+
+    public User(UserRequestDto userRequestDto) {
+        this.email = userRequestDto.getEmail();
+        this.pwd = userRequestDto.getPw();
+        this.name = userRequestDto.getName();
+        this.address = new Address(userRequestDto.getZipcode(), userRequestDto.getBaseAddress(), userRequestDto.getDetailedAddress());
+    }
 
 }
