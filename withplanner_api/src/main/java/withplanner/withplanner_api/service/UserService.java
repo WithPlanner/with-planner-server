@@ -19,4 +19,8 @@ public class UserService {
         User savedUser = userRepository.save(new User(userRequestDto));
         return savedUser.getId();
     }
+
+    public boolean checkDupNickname(String nickname) {
+        return userRepository.existsByNickname(nickname);
+    }
 }

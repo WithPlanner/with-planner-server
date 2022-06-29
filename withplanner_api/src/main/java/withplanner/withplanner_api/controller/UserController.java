@@ -35,11 +35,14 @@ public class UserController {
 
     /**
      * 닉네임 중복 확인
+     * @param nickname
+     * @return 사용 불가능한 중복 닉네임이면 -> true, 사용 가능한 닉네임이면 -> false
+     *
      */
-//    @PostMapping()
-//    public boolean checkNicknameDuplicate(@RequestParam String nickname) {
-//
-//    }
+    @PostMapping()
+    public boolean checkDupNickname(@RequestParam String nickname) {
+        return userService.checkDupNickname(nickname);
+    }
 
 
 }
