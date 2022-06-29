@@ -20,6 +20,10 @@ public class UserService {
         return savedUser.getId();
     }
 
+    public boolean checkDupEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
     public boolean checkDupNickname(String nickname) {
         return userRepository.existsByNickname(nickname);
     }

@@ -5,4 +5,5 @@ import withplanner.withplanner_api.domain.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByNickname(String nickname);
+    boolean existsByEmail(String email);
 }

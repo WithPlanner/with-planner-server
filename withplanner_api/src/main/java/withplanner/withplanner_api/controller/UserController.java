@@ -28,10 +28,16 @@ public class UserController {
      * 이메일 인증
      */
 
+
     /**
      * 이메일 중복 확인
+     * @param email
+     * @return 사용 불가능한 중복 이메일이면 -> true, 사용 가능한 이메일이면 -> false
      */
-
+    @PostMapping("/sign_up/check_dup_email")
+    public boolean checkDupEmail(@RequestParam String email) {
+        return userService.checkDupEmail(email);
+    }
 
     /**
      * 닉네임 중복 확인
