@@ -1,6 +1,7 @@
 package withplanner.withplanner_api.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Embeddable;
@@ -8,6 +9,7 @@ import javax.persistence.Embeddable;
 @Embeddable
 @Getter
 @Setter
+@NoArgsConstructor
 public class Address {
     private String zipcode; //addr1 - 우편번호
     private String baseAddress; //addr2 - 기본주소

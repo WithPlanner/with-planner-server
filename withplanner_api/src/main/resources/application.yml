@@ -1,3 +1,6 @@
+server:
+  port: 8081
+
 spring:
   datasource:
     url:  jdbc:h2:tcp://localhost/~/withplanner
@@ -5,9 +8,10 @@ spring:
     password:
     driver-class-name: org.h2.Driver
 
+
   jpa:
     hibernate:
-      ddl-auto: create #자동으로 테이블 생성해주는 속성.
+      ddl-auto: create-drop #자동으로 테이블 생성해주는 속성.
     properties:
       hibernate:
         #    show_sql: true  //System.out.print로 sql문을 출력

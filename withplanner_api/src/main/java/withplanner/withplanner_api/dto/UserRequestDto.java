@@ -2,9 +2,11 @@ package withplanner.withplanner_api.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @NoArgsConstructor
+@Setter
 public class UserRequestDto {
     private String email;
     private String pw;
