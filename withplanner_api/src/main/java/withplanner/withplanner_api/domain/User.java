@@ -1,6 +1,7 @@
 package withplanner.withplanner_api.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import withplanner.withplanner_api.dto.UserRequestDto;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name ="users")
+@NoArgsConstructor
 public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue
@@ -61,7 +63,15 @@ public class User extends BaseTimeEntity {
         this.email = userRequestDto.getEmail();
         this.pwd = userRequestDto.getPw();
         this.name = userRequestDto.getName();
+        this.nickname = userRequestDto.getNickname();
         this.address = new Address(userRequestDto.getZipcode(), userRequestDto.getBaseAddress(), userRequestDto.getDetailedAddress());
+    }
+
+    public User(String email, String pwd, String name, String nickname) {
+        this.email = email;
+        this.pwd = pwd;
+        this.name = name;
+        this.nickname = nickname;
     }
 
 }

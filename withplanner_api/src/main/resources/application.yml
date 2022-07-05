@@ -13,6 +13,18 @@ spring:
         #    show_sql: true  //System.out.print로 sql문을 출력
         format_sql: true
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: hongseoda@gmail.com
+    password: xlhuhjxztsdvqxvc
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 logging.level:
   org.hibernate.SQL: debug  #logging으로 sql문을 출력
   org.hibernate.type: trace #sql문이 출력될 때 파라미터 값이 ?로 뜨는걸 값이 출력되도록 하는 설정.
