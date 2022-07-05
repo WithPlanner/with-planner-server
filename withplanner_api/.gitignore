@@ -1,3 +1,7 @@
+# 프로젝트 제외 경로
+/withplanner_api/.gradle/
+/withplanner_api/build/
+
 # Created by https://www.toptal.com/developers/gitignore/api/java,intellij,macos,windows
 # Edit at https://www.toptal.com/developers/gitignore?templates=java,intellij,macos,windows
 

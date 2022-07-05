@@ -3,11 +3,12 @@ package withplanner.withplanner_api.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -17,9 +18,7 @@ import withplanner.withplanner_api.jwt.JwtTokenProvider;
 @Configuration
 @EnableWebSecurity // 스프링 Security 지원을 가능하게 함
 @RequiredArgsConstructor
-//@EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
     private final JwtTokenProvider jwtTokenProvider;
 
     @Bean
@@ -33,7 +32,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-
 
     //로그인,회원가입에 대한 요청은 인증(권한) 없어도 접근 가능하도록 설정.
     //나머지 url은 무조건 인증을 받아야 함.
@@ -51,10 +49,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
     }
-
-
-
-
-
-
 }

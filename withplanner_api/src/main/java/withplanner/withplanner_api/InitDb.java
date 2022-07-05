@@ -4,13 +4,11 @@ package withplanner.withplanner_api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import withplanner.withplanner_api.domain.User;
 import withplanner.withplanner_api.dto.UserRequestDto;
 import withplanner.withplanner_api.repository.UserRepository;
 import withplanner.withplanner_api.service.UserService;
 
 import javax.annotation.PostConstruct;
-import javax.persistence.EntityManager;
 
 @Component
 @RequiredArgsConstructor
@@ -54,4 +52,6 @@ public class InitDb {
         }
 
     }
+
+
 }

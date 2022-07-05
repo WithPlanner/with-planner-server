@@ -1,8 +1,6 @@
 package withplanner.withplanner_api.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +16,9 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @Table(name ="users")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseTimeEntity implements UserDetails {
+
     @Id
     @GeneratedValue
     @Column(name="user_idx")
@@ -61,18 +61,15 @@ public class User extends BaseTimeEntity implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<CommunityMember> communityMembers= new ArrayList<>();
 
-    public User(UserRequestDto userRequestDto,String role) {
+    public User(UserRequestDto userRequestDto, String role) {
         this.email = userRequestDto.getEmail();
         this.pwd = userRequestDto.getPw();
         this.name = userRequestDto.getName();
+        this.nickname = userRequestDto.getNickname();
         this.address = new Address(userRequestDto.getZipcode(), userRequestDto.getBaseAddress(), userRequestDto.getDetailedAddress());
+        this.emailAuth = true;
         this.roles.add(role);
     }
-
-    //사용x
-    protected User() {
-    }
-
 
     //UserDetails 구현체 관련 코드 - 필수
 
