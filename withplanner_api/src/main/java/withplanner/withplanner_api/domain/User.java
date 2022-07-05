@@ -1,22 +1,24 @@
 package withplanner.withplanner_api.domain;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import withplanner.withplanner_api.dto.UserRequestDto;
 
 
 import javax.persistence.*;
 import javax.persistence.criteria.Order;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
 @Setter
 @Table(name ="users")
-@NoArgsConstructor
-public class User extends BaseTimeEntity {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class User extends BaseTimeEntity implements UserDetails {
+
     @Id
     @GeneratedValue
     @Column(name="user_idx")
@@ -59,20 +61,53 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user")
     private List<CommunityMember> communityMembers= new ArrayList<>();
 
-    public User(UserRequestDto userRequestDto) {
+    public User(UserRequestDto userRequestDto, String role) {
         this.email = userRequestDto.getEmail();
         this.pwd = userRequestDto.getPw();
         this.name = userRequestDto.getName();
         this.nickname = userRequestDto.getNickname();
         this.address = new Address(userRequestDto.getZipcode(), userRequestDto.getBaseAddress(), userRequestDto.getDetailedAddress());
         this.emailAuth = true;
+        this.roles.add(role);
     }
 
-    public User(String email, String pwd, String name, String nickname) {
-        this.email = email;
-        this.pwd = pwd;
-        this.name = name;
-        this.nickname = nickname;
+    //UserDetails 구현체 관련 코드 - 필수
+
+    @ElementCollection
+    @CollectionTable(joinColumns = @JoinColumn(name = "user_idx"))
+    @Column(name="role")
+    private List<String> roles = new ArrayList<>();
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
+    @Override
+    public String getPassword() {
+        return null;
+    }
+    @Override
+    public String getUsername() {
+        return null;
+    }
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
+
 
 }
