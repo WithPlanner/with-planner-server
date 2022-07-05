@@ -1,9 +1,28 @@
+# 프로젝트 제외 경로
+/withplanner_api/.gradle/
+/withplanner_api/build/
+
 # Created by https://www.toptal.com/developers/gitignore/api/java,intellij,macos,windows
 # Edit at https://www.toptal.com/developers/gitignore?templates=java,intellij,macos,windows
 
 ### Intellij ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
+
+# 프로젝트 제외 경로
+/withplanner_api/.gradle/
+/withplanner_api/build/
+
+
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+logs
+*.yml
+withplanner_api/src/main/java/withplanner/withplanner_api/jwt/Secret.java
+
 
 # User-specific stuff
 .idea/**/workspace.xml
@@ -199,6 +218,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://w:ww.toptal.com/developers/gitignore/api/java,intellij,macos,windows
-
-src/main/resources/application.yml
+# End of https://www.toptal.com/developers/gitignore/api/java,intellij,macos,windows
