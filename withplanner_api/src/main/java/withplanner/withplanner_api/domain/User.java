@@ -65,6 +65,7 @@ public class User extends BaseTimeEntity {
         this.name = userRequestDto.getName();
         this.nickname = userRequestDto.getNickname();
         this.address = new Address(userRequestDto.getZipcode(), userRequestDto.getBaseAddress(), userRequestDto.getDetailedAddress());
+        this.emailAuth = true;
     }
 
     public User(String email, String pwd, String name, String nickname) {

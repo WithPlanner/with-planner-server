@@ -26,6 +26,7 @@ public class EmailAuth {
     private Boolean expired;
     private LocalDateTime expireDate;
 
+
     @Builder
     public EmailAuth(String email, String authToken, Boolean expired) {
         this.email = email;
@@ -37,6 +38,4 @@ public class EmailAuth {
     public void useToken() {
         this.expired = true;
     }
-
-
 }
