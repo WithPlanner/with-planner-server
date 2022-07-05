@@ -35,7 +35,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-
     //로그인,회원가입에 대한 요청은 인증(권한) 없어도 접근 가능하도록 설정.
     //나머지 url은 무조건 인증을 받아야 함.
     //UsernamePasswordAuthenticationFilter전에 JwtAuthenticationFilter가 인터셉트 해서 토큰 유효성 검사.
