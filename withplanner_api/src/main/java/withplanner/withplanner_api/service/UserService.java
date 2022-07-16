@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import withplanner.withplanner_api.domain.EmailAuth;
 import withplanner.withplanner_api.domain.User;
 import withplanner.withplanner_api.dto.UserRequestDto;
+import withplanner.withplanner_api.dto.login.EmailAuthRes;
 import withplanner.withplanner_api.repository.EmailRepository;
 import withplanner.withplanner_api.repository.UserRepository;
 import withplanner.withplanner_api.util.AuthEmailSender;
@@ -40,17 +41,17 @@ public class UserService implements UserDetailsService {
         return userRepository.existsByNickname(nickname);
     }
 
-    public boolean checkValidEmail(String email) {
+    public EmailAuthRes checkValidEmail(String email) {
         if(checkDupEmail(email))
-            return false;
+            return new EmailAuthRes(false);
 
         String[] domain = email.split("\\.|@");
         System.out.println("domain[1] = " + domain[1]);
         if(!domain[1].equals("sungshin"))
-            return false;
+            return new EmailAuthRes(false);
         
         sendAuthEmail(email);
-        return true;
+        return new EmailAuthRes(true);
     }
 
     @Transactional
@@ -73,7 +74,9 @@ public class UserService implements UserDetailsService {
                 );
         LocalDateTime now = LocalDateTime.now();
         if (now.isBefore(emailAuth.getExpireDate())) {
-            if (emailAuth.getAuthToken().equals(authToken))
+            if (emailAuth.getAuthToken().equals(authToken)) {
+
+            }
                 return true;
         }
         return false;
