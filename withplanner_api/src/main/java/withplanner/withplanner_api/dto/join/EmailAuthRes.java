@@ -1,4 +1,4 @@
-package withplanner.withplanner_api.dto.login;
+package withplanner.withplanner_api.dto.join;
 
 import lombok.Data;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class EmailAuthRes {
-    Boolean isSend;
+    private Boolean isSend;
 
     public EmailAuthRes(Boolean isSend) {
         this.isSend = isSend;

@@ -10,25 +10,24 @@ import org.springframework.stereotype.Component;
 public class AuthEmailSender {
     private final String FROM = "withplanner@test.com";
     private final String TITLE = "[위드플래너]안녕하세요 이메일 인증 메세지입니다.";
-    private final String DOMAIN = "http://localhost:8080";
 
     @Autowired
     private JavaMailSender mailSender;
 
     @Async
-    public void sendMail(String mailTo, String authToken) {
+    public void sendMail(String mailTo, int authNumber) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(mailTo);
         message.setFrom(FROM);
         message.setSubject(TITLE);
-        message.setText(makeText(mailTo,authToken));
+        message.setText(makeText(authNumber));
         mailSender.send(message);
     }
 
-    public String makeText(String email, String authToken) {
+    public String makeText(int authNumber) {
         return  "안녕하세요 위드플래너에 가입해 주셔서 감사합니다.\n" +
-                "아래 링크를 클릭하시면 이메일 인증이 완료됩니다.\n " +
-                DOMAIN+"/sign_up/check_valid_email?email="+email+"&authToken="+authToken+"\n\n" +
+                "다음 인증번호를 입력해주시면 이메일 인증이 완료됩니다.\n " +
+                "인증번호는 " + authNumber +" 입니다.\n\n" +
                 "감사합니다.";
     }
 }

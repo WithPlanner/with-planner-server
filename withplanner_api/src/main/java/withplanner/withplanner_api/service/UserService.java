@@ -8,13 +8,13 @@ import org.springframework.transaction.annotation.Transactional;
 import withplanner.withplanner_api.domain.EmailAuth;
 import withplanner.withplanner_api.domain.User;
 import withplanner.withplanner_api.dto.UserRequestDto;
-import withplanner.withplanner_api.dto.login.EmailAuthRes;
+import withplanner.withplanner_api.dto.join.AuthNumberRes;
+import withplanner.withplanner_api.dto.join.EmailAuthRes;
 import withplanner.withplanner_api.repository.EmailRepository;
 import withplanner.withplanner_api.repository.UserRepository;
 import withplanner.withplanner_api.util.AuthEmailSender;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 
 @Service
@@ -56,30 +56,31 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void sendAuthEmail(String email) {
-        String authToken = UUID.randomUUID().toString();
+        int authNumber = (int)(Math.random() * (99999 - 10000 + 1)) + 10000;
         emailRepository.save(
                 EmailAuth.builder()
                         .email(email)
-                        .authToken(authToken)
+                        .authNumber(authNumber)
                         .expired(false)
                         .build()
         );
-        authMailSender.sendMail(email, authToken);
+        authMailSender.sendMail(email, authNumber);
     }
 
-    public boolean confirmEmail(String email, String authToken) {
+    public AuthNumberRes confirmEmail(String email, int authNumber) {
         EmailAuth emailAuth = emailRepository.findByEmail(email)
                 .orElseThrow(
                         () -> new IllegalArgumentException("존재하지않는 이메일 입니다.")
                 );
         LocalDateTime now = LocalDateTime.now();
         if (now.isBefore(emailAuth.getExpireDate())) {
-            if (emailAuth.getAuthToken().equals(authToken)) {
-
+            if (emailAuth.getAuthNumber() == authNumber) {
+                return new AuthNumberRes(true);
             }
-                return true;
+            return new AuthNumberRes(false, "기한이 만료된 번호입니다.");
         }
-        return false;
+
+        return new AuthNumberRes(false, "인증번호가 틀렸습니다.");
     }
 
     public User findUserById(Long id) {

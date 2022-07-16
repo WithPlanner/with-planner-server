@@ -5,11 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import withplanner.withplanner_api.domain.EmailAuth;
 import withplanner.withplanner_api.domain.User;
 
 import withplanner.withplanner_api.dto.UserRequestDto;
-import withplanner.withplanner_api.dto.login.EmailAuthRes;
+import withplanner.withplanner_api.dto.join.AuthNumberRes;
+import withplanner.withplanner_api.dto.join.EmailAuthRes;
 import withplanner.withplanner_api.dto.login.LoginReq;
 import withplanner.withplanner_api.dto.login.LoginRes;
 import withplanner.withplanner_api.exception.BaseException;
@@ -48,8 +48,8 @@ public class UserController {
     }
 
     @GetMapping("/sign_up/check_valid_email")
-    public boolean confirmEmail(@RequestParam String email, @RequestParam String authToken) {
-        return userService.confirmEmail(email, authToken);
+    public AuthNumberRes confirmEmail(@RequestParam String email, @RequestParam int authNumber) {
+        return userService.confirmEmail(email, authNumber);
     }
 
 //    /**

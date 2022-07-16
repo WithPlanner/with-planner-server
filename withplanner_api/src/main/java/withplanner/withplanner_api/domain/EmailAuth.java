@@ -22,15 +22,15 @@ public class EmailAuth {
     private Long id;
 
     private String email;
-    private String authToken;
+    private int authNumber;
     private Boolean expired;
     private LocalDateTime expireDate;
 
 
     @Builder
-    public EmailAuth(String email, String authToken, Boolean expired) {
+    public EmailAuth(String email, int authNumber, Boolean expired) {
         this.email = email;
-        this.authToken = authToken;
+        this.authNumber = authNumber;
         this.expired = expired;
         this.expireDate = LocalDateTime.now().plusMinutes(MAX_EXPIRE_TIME);
     }
