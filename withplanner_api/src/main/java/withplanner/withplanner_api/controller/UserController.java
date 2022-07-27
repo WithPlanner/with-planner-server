@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import withplanner.withplanner_api.domain.User;
 
+import withplanner.withplanner_api.dto.ResultMsgResp;
 import withplanner.withplanner_api.dto.UserRequestDto;
 import withplanner.withplanner_api.dto.join.AuthNumberRes;
 import withplanner.withplanner_api.dto.join.EmailAuthRes;
@@ -32,7 +33,7 @@ public class UserController {
      * 회원가입 + 닉네임 중복확인
      */
     @PostMapping("/sign_up/submit")
-    public Long join(@RequestBody UserRequestDto userRequestDto) {
+    public ResultMsgResp join(@RequestBody UserRequestDto userRequestDto) {
         passwordEncoder.encode(userRequestDto.getPw());
         userRequestDto.encodePassword(passwordEncoder.encode(userRequestDto.getPw()));
         String role = "ROLE_USER";
@@ -52,15 +53,15 @@ public class UserController {
         return userService.confirmEmail(email, authNumber);
     }
 
-//    /**
-//     * 닉네임 중복 확인
-//     * @param nickname
-//     * @return 사용 불가능한 중복 닉네임이면 -> true, 사용 가능한 닉네임이면 -> false
-//     */
-//    @PostMapping("/sign_up/check_dup_nickname")
-//    public boolean checkDupNickname(@RequestParam String nickname) {
-//        return userService.checkDupNickname(nickname);
-//    }
+    /**
+     * 닉네임 중복 확인
+     * @param nickname
+     * @return 사용 불가능한 중복 닉네임이면 -> true, 사용 가능한 닉네임이면 -> false
+     */
+    @PostMapping("/sign_up/check_dup_nickname")
+    public ResultMsgResp checkDupNickname(@RequestParam String nickname) {
+        return userService.checkDupNickname(nickname);
+    }
 
 
     /**

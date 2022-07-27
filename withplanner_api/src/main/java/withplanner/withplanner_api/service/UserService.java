@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import withplanner.withplanner_api.domain.EmailAuth;
 import withplanner.withplanner_api.domain.User;
+import withplanner.withplanner_api.dto.ResultMsgResp;
 import withplanner.withplanner_api.dto.UserRequestDto;
 import withplanner.withplanner_api.dto.join.AuthNumberRes;
 import withplanner.withplanner_api.dto.join.EmailAuthRes;
@@ -26,19 +27,21 @@ public class UserService implements UserDetailsService {
     private final EmailRepository emailRepository;
 
     @Transactional
-    public Long join(UserRequestDto userRequestDto, String role) {
-        if (checkDupNickname(userRequestDto.getNickname())) // 중복 닉네임이면 -1 반환
-            return -1L;
+    public ResultMsgResp join(UserRequestDto userRequestDto, String role) {
+        if (userRepository.existsByNickname(userRequestDto.getNickname()))
+            return new ResultMsgResp("중복된 닉네임입니다.", false);
         User savedUser = userRepository.save(new User(userRequestDto,role));
-        return savedUser.getId();
+        return new ResultMsgResp("회원가입에 성공하였습니다.", true);
     }
 
     public boolean checkDupEmail(String email) {
         return userRepository.existsByEmail(email);
     }
 
-    public boolean checkDupNickname(String nickname) {
-        return userRepository.existsByNickname(nickname);
+    public ResultMsgResp checkDupNickname(String nickname) {
+        if(userRepository.existsByNickname(nickname))
+            return new ResultMsgResp("중복된 닉네임입니다.", false);
+        return new ResultMsgResp("사용가능한 닉네임입니다.", true);
     }
 
     public EmailAuthRes checkValidEmail(String email) {
