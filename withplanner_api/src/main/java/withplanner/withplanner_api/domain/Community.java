@@ -27,7 +27,9 @@ public class Community extends BaseTimeEntity{
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    private Integer headCount;
+    private Integer headCount; //최대인원
+
+    private Integer currentCount; //현재인원
 
     @ElementCollection
     private List<String> days =new ArrayList<>();
@@ -54,4 +56,8 @@ public class Community extends BaseTimeEntity{
     private List<CommunityMember> communityMembers= new ArrayList<>();
 
 
+    //커뮤니티 가입 시 currentCount +1
+    public void plusCurrentCount(){
+        this.currentCount +=1;
+    }
 }

@@ -14,9 +14,10 @@ import java.util.stream.Collectors;
 
 @Entity
 @Getter
-@Setter
+@Builder
 @Table(name ="users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class User extends BaseTimeEntity implements UserDetails {
 
     @Id

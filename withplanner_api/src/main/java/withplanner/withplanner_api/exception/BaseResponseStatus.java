@@ -26,6 +26,7 @@ public enum BaseResponseStatus {
     EMPTY_PASSWORD(false,2006,"비밀번호 값을 입력해주세요"),
     NOT_EXISTS_EMAIL(false,2007,"존재하지 않는 이메일입니다."),
     NOT_EXISTS_COMMUNITY(false, 2008, "존재하지 않는 커뮤니티입니다."),
+    EXCEED_HEAD_COUNT(false,2009,"커뮤니티의 최대 인원을 초과할 수 없습니다."),
 
     /**
      * 3000 : 홍서
