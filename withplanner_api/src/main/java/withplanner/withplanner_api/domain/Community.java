@@ -1,5 +1,6 @@
 package withplanner.withplanner_api.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,11 +16,6 @@ public class Community extends BaseTimeEntity{
     @GeneratedValue
     @Column(name="community_idx")
     private Long id;
-
-    //createdAt
-    //updatedAt
-
-
     private String name;
     private String introduce;
     private String communityImg;
@@ -53,5 +49,15 @@ public class Community extends BaseTimeEntity{
     @OneToMany(mappedBy = "community")
     private List<CommunityMember> communityMembers= new ArrayList<>();
 
-
+    @Builder
+    public Community(String name, String introduce, String communityImg, Integer headCount, Category category, List<String> days, String time, Type type) {
+        this.name = name;
+        this.introduce = introduce;
+        this.communityImg = communityImg;
+        this.headCount = headCount;
+        this.category = category;
+        this.days = days;
+        this.time = time;
+        this.type = type;
+    }
 }
