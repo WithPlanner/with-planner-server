@@ -35,6 +35,4 @@ public class CommunityMember extends BaseTimeEntity {
     private Map map;
 
 
-
-
 }
