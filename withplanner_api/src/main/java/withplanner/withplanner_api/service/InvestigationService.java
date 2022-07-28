@@ -5,13 +5,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import withplanner.withplanner_api.dto.ResultMsgResp;
 import withplanner.withplanner_api.dto.investigation.InvestReq;
 
 @Service
 @RequiredArgsConstructor
 public class InvestigationService {
 
-    public String invest(InvestReq investReq) {
+    public ResultMsgResp invest(InvestReq investReq) {
         String url = "http://localhost:5000/invest";
 
         RestTemplate rest = new RestTemplate();
@@ -36,10 +37,10 @@ public class InvestigationService {
         HttpStatus httpStatus = responseEntity.getStatusCode();
         int status = httpStatus.value();
 
-        String response = responseEntity.getBody();
+        String response = responseEntity.getBody(); //빋은 키테고리로 랜덤한 방 리스트를 저장해줌(메인에서 리스팅)
         System.out.println("Response status: " + status);
         System.out.println("response = " + response);
 
-        return response;
+        return new ResultMsgResp("설문조사에 응해주셔서 감사합니다.", true);
     }
 }
