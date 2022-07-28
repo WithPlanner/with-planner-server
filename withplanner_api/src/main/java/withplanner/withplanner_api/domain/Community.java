@@ -1,8 +1,6 @@
 package withplanner.withplanner_api.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -10,7 +8,8 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Community extends BaseTimeEntity{
     @Id
     @GeneratedValue
@@ -23,7 +22,9 @@ public class Community extends BaseTimeEntity{
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    private Integer headCount;
+    private Integer headCount; //최대인원
+
+    private Integer currentCount; //현재인원
 
     @ElementCollection
     private List<String> days =new ArrayList<>();
@@ -49,6 +50,12 @@ public class Community extends BaseTimeEntity{
     @OneToMany(mappedBy = "community")
     private List<CommunityMember> communityMembers= new ArrayList<>();
 
+
+    //커뮤니티 가입 시 currentCount +1
+    public void plusCurrentCount() {
+        this.currentCount += 1;
+    }
+
     @Builder
     public Community(String name, String introduce, String communityImg, Integer headCount, Category category, List<String> days, String time, Type type) {
         this.name = name;
@@ -59,5 +66,6 @@ public class Community extends BaseTimeEntity{
         this.days = days;
         this.time = time;
         this.type = type;
+
     }
 }
