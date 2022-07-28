@@ -14,7 +14,7 @@ public enum BaseResponseStatus {
 
 
     /**
-     * 2000 : Request 오류
+     * 2000 : 민희
      */
 
     REQUEST_ERROR(false, 2000, "입력값을 확인해주세요."),
@@ -25,17 +25,15 @@ public enum BaseResponseStatus {
     EMPTY_EMAIL(false,2005,"이메일 값을 입력해주세요"),
     EMPTY_PASSWORD(false,2006,"비밀번호 값을 입력해주세요"),
     NOT_EXISTS_EMAIL(false,2007,"존재하지 않는 이메일입니다."),
-
-
+    NOT_EXISTS_COMMUNITY(false, 2008, "존재하지 않는 커뮤니티입니다."),
 
     /**
-     * 3000 : Response 오류
+     * 3000 : 홍서
      */
 
 
-    /**
-     * 4000 : Database, Server 오류
-     */
+
+
 
     INTERNAL_SERVER_ERROR(false,4000,"서버 오류입니다.");
 
