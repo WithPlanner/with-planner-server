@@ -14,7 +14,8 @@ import withplanner.withplanner_api.repository.CommunityRepository;
 public class CommunityService {
     private final CommunityRepository communityRepository;
 //    private final S3Service s3Service;
-    public Long createMapCoummunity(CommunityMakeReq reqDto) {
+
+    public Long createMapCommunity(CommunityMakeReq reqDto) {
         Community community;
         if (reqDto.getCommunityImg() != null) {
 //            String name = s3Service.uploadToAWS(reqDto.getCommunityImg());
@@ -40,6 +41,38 @@ public class CommunityService {
                     .days(reqDto.getDay())
                     .time(reqDto.getTime())
                     .type(Type.mapPost)
+                    .build();
+        }
+
+        return communityRepository.save(community).getId();
+    }
+
+    public Long createPostCommunity(CommunityMakeReq reqDto) {
+        Community community;
+        if (reqDto.getCommunityImg() != null) {
+//            String name = s3Service.uploadToAWS(reqDto.getCommunityImg());
+            //s3에 저장된 imgUrl 이를 저장하면 된다.
+//            String imgUrl = "https://gogumacat-s3.s3.ap-northeast-2.amazonaws.com/" + name;
+            String imgUrl = "test";
+            community = Community.builder()
+                    .name(reqDto.getName())
+                    .introduce(reqDto.getIntroduce())
+                    .communityImg(imgUrl)
+                    .headCount(reqDto.getHeadCount())
+                    .category(reqDto.getCategory())
+                    .days(reqDto.getDay())
+                    .time(reqDto.getTime())
+                    .type(Type.post)
+                    .build();
+        } else {
+            community = Community.builder()
+                    .name(reqDto.getName())
+                    .introduce(reqDto.getIntroduce())
+                    .headCount(reqDto.getHeadCount())
+                    .category(reqDto.getCategory())
+                    .days(reqDto.getDay())
+                    .time(reqDto.getTime())
+                    .type(Type.post)
                     .build();
         }
 

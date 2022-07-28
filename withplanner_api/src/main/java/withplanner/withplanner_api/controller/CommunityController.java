@@ -15,6 +15,11 @@ public class CommunityController {
 
     @PostMapping(value = "/make/loc", consumes = {"multipart/form-data"})
     public Long createMapCommunity(@ModelAttribute CommunityMakeReq reqDto) {
-        return communityService.createMapCoummunity(reqDto);
+        return communityService.createMapCommunity(reqDto);
+    }
+
+    @PostMapping(value = "/make/post", consumes = {"multipart/form-data"})
+    public Long createPostCommunity(@ModelAttribute CommunityMakeReq reqDto) {
+        return communityService.createPostCommunity(reqDto);
     }
 }
