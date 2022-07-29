@@ -7,10 +7,17 @@ import withplanner.withplanner_api.domain.Community;
 import withplanner.withplanner_api.domain.Type;
 import withplanner.withplanner_api.domain.User;
 import withplanner.withplanner_api.dto.community.CommunityMakeReq;
+import withplanner.withplanner_api.dto.community.CommunityResp;
+import withplanner.withplanner_api.dto.post.PostCardResp;
 import withplanner.withplanner_api.exception.BaseException;
 import withplanner.withplanner_api.exception.BaseResponseStatus;
 import withplanner.withplanner_api.repository.CommunityRepository;
+import withplanner.withplanner_api.repository.PostRepository;
 import withplanner.withplanner_api.repository.UserRepository;
+
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,12 +25,13 @@ import withplanner.withplanner_api.repository.UserRepository;
 public class CommunityService {
     private final CommunityRepository communityRepository;
     private final UserRepository userRepository;
+    private final PostRepository postRepository;
 //    private final S3Service s3Service;
 
-    public Long createMapCommunity(CommunityMakeReq reqDto, String usernmae) {
+    public Long createMapCommunity(CommunityMakeReq reqDto, String username) {
         Community community;
 
-        User user = userRepository.findByEmail(usernmae)
+        User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_EXISTS_PARTICIPANT));
 
         if (reqDto.getCommunityImg() != null) {
@@ -58,10 +66,10 @@ public class CommunityService {
         return communityRepository.save(community).getId();
     }
 
-    public Long createPostCommunity(CommunityMakeReq reqDto, String usernmae) {
+    public Long createPostCommunity(CommunityMakeReq reqDto, String username) {
         Community community;
 
-        User user = userRepository.findByEmail(usernmae)
+        User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_EXISTS_PARTICIPANT));
 
         if (reqDto.getCommunityImg() != null) {
@@ -94,5 +102,35 @@ public class CommunityService {
         user.addCommunity(community);
 
         return communityRepository.save(community).getId();
+    }
+
+    public CommunityResp getPostCommunityMain(Long communityId) {
+        Community community = communityRepository.findById(communityId)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_EXISTS_COMMUNITY));
+
+        //community의 최신 게시물 3개 가져오기
+        List<PostCardResp> posts = postRepository.findTop3ByCommunityIdOrderByCreatedAtDesc(community.getId()).stream().map(
+                p -> PostCardResp.builder()
+                        .postId(p.getId())
+                        .name(p.getName())
+                        .content(p.getContent())
+                        .images(p.getImages())
+                        .writerNickname(p.getUser().getNickname())
+                        .build()
+        ).collect(Collectors.toList());
+
+        return CommunityResp.builder()
+                .communityId(community.getId())
+                .name(community.getName())
+                .createdAt(community.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .introduce(community.getIntroduce())
+                .communityImg(community.getCommunityImg())
+                .category(community.getCategory().toString())
+                .headCount(community.getHeadCount())
+                .currentCount(community.getCurrentCount())
+                .posts(posts)
+                .build();
+
+
     }
 }

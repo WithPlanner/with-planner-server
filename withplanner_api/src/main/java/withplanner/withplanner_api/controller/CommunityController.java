@@ -6,6 +6,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import withplanner.withplanner_api.domain.User;
 import withplanner.withplanner_api.dto.community.CommunityMakeReq;
+import withplanner.withplanner_api.dto.community.CommunityResp;
 import withplanner.withplanner_api.service.CommunityService;
 
 @RestController
@@ -23,5 +24,10 @@ public class CommunityController {
     @PostMapping(value = "/make/post", consumes = {"multipart/form-data"})
     public Long createPostCommunity(@ModelAttribute CommunityMakeReq reqDto, @AuthenticationPrincipal User user) {
         return communityService.createPostCommunity(reqDto, user.getUsername());
+    }
+
+    @GetMapping("/community/post/{communityIdx}")
+    public CommunityResp getPostCommunityMain(@PathVariable Long communityIdx) {
+        return communityService.getPostCommunityMain(communityIdx);
     }
 }
