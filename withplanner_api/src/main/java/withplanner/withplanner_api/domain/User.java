@@ -110,5 +110,10 @@ public class User extends BaseTimeEntity implements UserDetails {
         return false;
     }
 
+    public void addCommunity(Community community) {
+        communities.add(community);
+        community.addUser(this);
+    }
+
 
 }
