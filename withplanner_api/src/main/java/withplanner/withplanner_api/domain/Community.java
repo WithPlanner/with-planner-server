@@ -74,4 +74,9 @@ public class Community extends BaseTimeEntity{
     public void addUser(User user) {
         this.createUser = user;
     }
+
+    public void addPost(Post post) {
+        posts.add(post);
+        post.addCommunity(this);
+    }
 }

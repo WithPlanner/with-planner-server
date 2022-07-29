@@ -22,4 +22,13 @@ public class PostImg extends BaseTimeEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_idx")
     private Post post;
+
+    public void addPost(Post post) {
+        this.post = post;
+    }
+
+    public PostImg(String imgUrl) {
+        this.imgUrl = imgUrl;
+        this.status = Status.ACTIVE;
+    }
 }

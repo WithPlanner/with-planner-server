@@ -23,7 +23,7 @@ public class CommunityService {
     public Long createMapCommunity(CommunityMakeReq reqDto, String usernmae) {
         Community community;
 
-        User user = userRepository.findByUsername(usernmae)
+        User user = userRepository.findByEmail(usernmae)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_EXISTS_PARTICIPANT));
 
         if (reqDto.getCommunityImg() != null) {
@@ -61,7 +61,7 @@ public class CommunityService {
     public Long createPostCommunity(CommunityMakeReq reqDto, String usernmae) {
         Community community;
 
-        User user = userRepository.findByUsername(usernmae)
+        User user = userRepository.findByEmail(usernmae)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_EXISTS_PARTICIPANT));
 
         if (reqDto.getCommunityImg() != null) {

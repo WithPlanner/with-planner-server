@@ -1,5 +1,6 @@
 package withplanner.withplanner_api.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -36,4 +37,23 @@ public class Post extends BaseTimeEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "community_idx")
     private Community community;
+
+    @Builder
+    public Post(String name, String content) {
+        this.name = name;
+        this.content = content;
+    }
+
+    public void addUser(User user) {
+        this.user = user;
+    }
+
+    public void addCommunity(Community community) {
+        this.community = community;
+    }
+
+    public void addPostImg(PostImg postImg) {
+        images.add(postImg);
+        postImg.addPost(this);
+    }
 }
