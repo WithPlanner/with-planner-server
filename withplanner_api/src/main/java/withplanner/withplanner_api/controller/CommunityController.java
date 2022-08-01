@@ -7,7 +7,11 @@ import org.springframework.web.bind.annotation.*;
 import withplanner.withplanner_api.domain.User;
 import withplanner.withplanner_api.dto.community.CommunityMakeReq;
 import withplanner.withplanner_api.dto.community.CommunityResp;
+import withplanner.withplanner_api.dto.post.ListCardResp;
+import withplanner.withplanner_api.dto.post.MainListResp;
 import withplanner.withplanner_api.service.CommunityService;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,5 +33,15 @@ public class CommunityController {
     @GetMapping("/community/post/{communityIdx}")
     public CommunityResp getPostCommunityMain(@PathVariable Long communityIdx) {
         return communityService.getPostCommunityMain(communityIdx);
+    }
+
+    @GetMapping("/main")
+    public MainListResp mainListing(@AuthenticationPrincipal User user) {
+        return communityService.mainListing(user);
+    }
+
+    @GetMapping("/main/search")
+    public List<ListCardResp> searchListing(@RequestParam String query) {
+        return communityService.searchCommunity(query);
     }
 }

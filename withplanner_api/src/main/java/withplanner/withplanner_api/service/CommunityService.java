@@ -8,9 +8,12 @@ import withplanner.withplanner_api.domain.Type;
 import withplanner.withplanner_api.domain.User;
 import withplanner.withplanner_api.dto.community.CommunityMakeReq;
 import withplanner.withplanner_api.dto.community.CommunityResp;
+import withplanner.withplanner_api.dto.post.ListCardResp;
+import withplanner.withplanner_api.dto.post.MainListResp;
 import withplanner.withplanner_api.dto.post.PostCardResp;
 import withplanner.withplanner_api.exception.BaseException;
 import withplanner.withplanner_api.exception.BaseResponseStatus;
+import withplanner.withplanner_api.repository.CommunityMemberRepository;
 import withplanner.withplanner_api.repository.CommunityRepository;
 import withplanner.withplanner_api.repository.PostRepository;
 import withplanner.withplanner_api.repository.UserRepository;
@@ -26,6 +29,7 @@ public class CommunityService {
     private final CommunityRepository communityRepository;
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final CommunityMemberRepository communityMemberRepository;
 //    private final S3Service s3Service;
 
     public Long createMapCommunity(CommunityMakeReq reqDto, String username) {
@@ -132,5 +136,55 @@ public class CommunityService {
                 .build();
 
 
+    }
+
+    public MainListResp mainListing(User user) {
+        //회원님을 위한 습관 모임
+        List<ListCardResp> recommendList = communityRepository.findTop6ByCategory(user.getRecommend()).stream().map(
+                c -> ListCardResp.builder()
+                        .communityId(c.getId())
+                        .name(c.getName())
+                        .communityImg(c.getCommunityImg())
+                        .build()
+        ).collect(Collectors.toList());
+
+        //회원님이 참여하는 습관 모임
+        List<ListCardResp> myList = user.getCommunities().stream().map(
+                c -> ListCardResp.builder()
+                        .communityId(c.getId())
+                        .name(c.getName())
+                        .communityImg(c.getCommunityImg())
+                        .build()
+        ).collect(Collectors.toList());
+
+        //가장 활성화된 습관 모임
+        List<ListCardResp> hotList = communityRepository.findTop6ByOrderByCurrentCountDesc().stream().map(
+                c -> ListCardResp.builder()
+                        .communityId(c.getId())
+                        .name(c.getName())
+                        .communityImg(c.getCommunityImg())
+                        .build()
+        ).collect(Collectors.toList());
+
+        //최신 습관 모임
+        List<ListCardResp> newList = communityRepository.findTop6ByOrderByCreatedAtDesc().stream().map(
+                c -> ListCardResp.builder()
+                        .communityId(c.getId())
+                        .name(c.getName())
+                        .communityImg(c.getCommunityImg())
+                        .build()
+        ).collect(Collectors.toList());
+
+        return new MainListResp(recommendList, myList, hotList, newList);
+    }
+
+    public List<ListCardResp> searchCommunity(String query) {
+        return communityRepository.findByNameContains(query).stream().map(
+                c -> ListCardResp.builder()
+                        .communityId(c.getId())
+                        .name(c.getName())
+                        .communityImg(c.getCommunityImg())
+                        .build()
+        ).collect(Collectors.toList());
     }
 }

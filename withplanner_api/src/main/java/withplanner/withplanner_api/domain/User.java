@@ -43,6 +43,8 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Embedded
     private Address address;
 
+    private String recommend;
+
     @OneToMany(mappedBy = "user")
     private List<Comment> comments = new ArrayList<>();
 
