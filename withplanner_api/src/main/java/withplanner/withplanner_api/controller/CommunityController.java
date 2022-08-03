@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import withplanner.withplanner_api.domain.User;
+import withplanner.withplanner_api.dto.JsonResult;
 import withplanner.withplanner_api.dto.community.CommunityMakeReq;
 import withplanner.withplanner_api.dto.community.CommunityResp;
 import withplanner.withplanner_api.dto.post.ListCardResp;
@@ -41,7 +42,8 @@ public class CommunityController {
     }
 
     @GetMapping("/main/search")
-    public List<ListCardResp> searchListing(@RequestParam String query) {
-        return communityService.searchCommunity(query);
+    public JsonResult searchListing(@RequestParam String query) {
+        List<ListCardResp> communities = communityService.searchCommunity(query);
+        return new JsonResult(communities.size(), communities);
     }
 }
