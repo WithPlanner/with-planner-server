@@ -41,5 +41,11 @@ public class CommunityMember extends BaseTimeEntity {
         this.user = user;
     }
 
+    //연관관계 메서드
+    public void connectMap(Map map){
+        this.map = map;
+        map.setCommunityMember(this);
+    }
+
 
 }
