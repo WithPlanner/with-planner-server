@@ -7,9 +7,13 @@ import org.springframework.web.bind.annotation.*;
 import withplanner.withplanner_api.domain.User;
 import withplanner.withplanner_api.dto.community.CommunityCreateLocationReq;
 import withplanner.withplanner_api.dto.community.CommunityCreateLocationRes;
+import withplanner.withplanner_api.dto.community.CommunityGetInfoRes;
 import withplanner.withplanner_api.dto.community.CommunityMakeReq;
+import withplanner.withplanner_api.exception.BaseException;
 import withplanner.withplanner_api.service.CommunityService;
 import withplanner.withplanner_api.service.MapService;
+
+import static withplanner.withplanner_api.exception.BaseResponseStatus.EXPIRED_JWT_TOKEN;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,14 +29,19 @@ public class CommunityController {
     }
 
     /**
-     * 위치 및 별칭 등록 (jwt 토큰 필요)
+     * 커뮤니티 정보 불러오기 (jwt 토큰 필요)
+     * - 참여 다이얼로그 클릭 시 불러오는 api
      * @param communityId
      */
-    @PostMapping(value = "/community/loc/search/{communityId}")
-    public CommunityCreateLocationRes createLocation(@AuthenticationPrincipal User user, @PathVariable("communityId") Long communityId, @ModelAttribute CommunityCreateLocationReq reqDto){
-        Long userId = user.getId();
-
-        CommunityCreateLocationRes communityCreateLocationRes = mapService.createLocation(reqDto, userId, communityId);
-        return communityCreateLocationRes;
+    @GetMapping(value="/communitiy/loc/info/{communityId}")
+    public CommunityGetInfoRes getCommunityInfo(@AuthenticationPrincipal User user, @PathVariable("communityId") Long communityId){
+        if(!user.isAccountNonExpired()){ //jwt 기한 만료시
+            throw new BaseException(EXPIRED_JWT_TOKEN);
+        }
+        CommunityGetInfoRes communityGetInfoRes = communityService.getCommunityInfo(communityId);
+        return communityGetInfoRes;
     }
+
+
+
 }
