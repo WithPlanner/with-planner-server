@@ -43,6 +43,20 @@ public class MapController {
 //        return communityAuthenticateLocationRes;
 //    }
 
+    /**
+     * 회원 위치 정보 가져오기 (jwt 토큰 필요)
+     * - 위치 인증 dialog에서 불러오는 api
+     * @param communityId
+     */
+    @GetMapping(value="/community/loc/user_location/{communityId}")
+    public CommunityUserLocationRes getUserLocation(@AuthenticationPrincipal User user, @PathVariable("communityId") Long communityId){
+        Long userId = user.getId();
+
+        CommunityUserLocationRes communityUserLocationRes = mapService.getUserLocation(userId, communityId);
+        return communityUserLocationRes;
+
+    }
+
 
 
 }

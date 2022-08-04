@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import withplanner.withplanner_api.domain.*;
 import withplanner.withplanner_api.dto.community.CommunityCreateLocationReq;
 import withplanner.withplanner_api.dto.community.CommunityCreateLocationRes;
+import withplanner.withplanner_api.dto.community.CommunityUserLocationRes;
 import withplanner.withplanner_api.exception.BaseException;
 import withplanner.withplanner_api.repository.CommunityMemberRepository;
 import withplanner.withplanner_api.repository.CommunityRepository;
@@ -54,5 +55,35 @@ public class MapService {
         return CommunityCreateLocationRes.toDto(map);
     }
 
+    public CommunityUserLocationRes getUserLocation(Long userId, Long communityId){
+
+        CommunityUserLocationRes communityUserLocationRes = null;
+
+        //유저 조회
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new BaseException(NOT_EXISTS_PARTICIPANT));
+
+        //커뮤니티 조회
+        CommunityMember communityMember = communityMemberRepository.findCommunityByUserIdAndCommunityId(userId,communityId)
+                .orElseThrow(()-> new BaseException(NOT_EXISTS_COMMUNITY_MEMBER));
+
+        String nickname = user.getNickname(); //유저 닉네임
+        double x = communityMember.getMap().getX(); //경도
+        double y= communityMember.getMap().getY(); //위도
+        String alias = communityMember.getMap().getAlias(); //목적지 별칭
+        String roadAddress = communityMember.getMap().getAddress().getBaseAddress(); //도로명 주소
+        String address = communityMember.getMap().getAddress().getDetailedAddress(); //지번 주소
+
+        //도로명 주소가 존재하지 않는 데이터인 경우
+        if(roadAddress==null){
+            communityUserLocationRes = new CommunityUserLocationRes(nickname,x,y,alias,address);
+        }
+        //도로명 주소가 존재하고 지번주소가 존재하지 않는 경우.
+        if(address == null){
+            communityUserLocationRes = new CommunityUserLocationRes(nickname,x,y,alias,roadAddress);
+
+        }
+        return communityUserLocationRes;
+    }
 
 }
