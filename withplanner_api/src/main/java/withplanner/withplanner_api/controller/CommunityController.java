@@ -34,11 +34,9 @@ public class CommunityController {
      * - 참여 다이얼로그 클릭 시 불러오는 api
      * @param communityId
      */
-    @GetMapping(value="/communitiy/loc/info/{communityId}")
+    @GetMapping(value="/community/info/{communityId}")
     public BaseResponse<CommunityGetInfoRes> getCommunityInfo(@AuthenticationPrincipal User user, @PathVariable("communityId") Long communityId){
-        if(!user.isAccountNonExpired()){ //jwt 기한 만료시
-            throw new BaseException(EXPIRED_JWT_TOKEN);
-        }
+        
         CommunityGetInfoRes communityGetInfoRes = communityService.getCommunityInfo(communityId);
         return new BaseResponse<>(communityGetInfoRes);
     }
