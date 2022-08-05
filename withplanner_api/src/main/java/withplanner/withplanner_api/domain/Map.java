@@ -32,9 +32,6 @@ public class Map extends BaseTimeEntity {
 
     @Builder
     public Map(double x, double y, Address address, String alias){
-        Assert.hasText(alias,"별칭이 없습니다.");
-        Assert.hasText(address.getBaseAddress(),"도로명 주소가 없습니다." );
-        Assert.hasText(address.getDetailedAddress(),"지번 주소가 없습니다." );
         this.x=x;
         this.y=y;
         this.address = address;

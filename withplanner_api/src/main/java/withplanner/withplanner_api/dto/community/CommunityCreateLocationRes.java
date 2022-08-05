@@ -1,9 +1,11 @@
 package withplanner.withplanner_api.dto.community;
 
 import lombok.Builder;
+import lombok.Data;
 import withplanner.withplanner_api.domain.Map;
 
 @Builder
+@Data
 public class CommunityCreateLocationRes {
     private Long mapId; //mapId
     private double longitude ; //경도
@@ -22,6 +24,7 @@ public class CommunityCreateLocationRes {
                 .roadAddress(map.getAddress().getBaseAddress())
                 .address(map.getAddress().getDetailedAddress())
                 .zipcode(map.getAddress().getZipcode())
+                .alias(map.getAlias())
                 .build();
     }
 

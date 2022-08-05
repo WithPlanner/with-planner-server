@@ -63,8 +63,9 @@ public class JwtTokenProvider {
 
     //jwt토큰에서 얻은 userId로 인증정보 조회
     public Authentication getAuthentication(String token){
-        User user =userService.findUserById(this.getUserPk(token)); //?
-        return new UsernamePasswordAuthenticationToken(user,"",user.getAuthorities());
+        User user = userService.findUserById(this.getUserPk(token)); //?
+        UserDetails userDetails = userService.loadUserByUsername(user.getEmail());
+        return new UsernamePasswordAuthenticationToken(user,"",userDetails.getAuthorities());
     }
 
     //토큰에서 userId 추출.

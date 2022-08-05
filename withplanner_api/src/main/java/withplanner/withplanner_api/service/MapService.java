@@ -2,6 +2,7 @@ package withplanner.withplanner_api.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import withplanner.withplanner_api.domain.*;
 import withplanner.withplanner_api.dto.community.CommunityCreateLocationReq;
 import withplanner.withplanner_api.dto.community.CommunityCreateLocationRes;
@@ -16,12 +17,14 @@ import static withplanner.withplanner_api.exception.BaseResponseStatus.*;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MapService {
     private final MapRepository mapRepository;
     private final CommunityRepository communityRepository;
     private final UserRepository userRepository;
     private final CommunityMemberRepository communityMemberRepository;
 
+    @Transactional
     public CommunityCreateLocationRes createLocation(CommunityCreateLocationReq req, Long userId, Long communityId){
         //user
         User user = userRepository.findById(userId)
@@ -31,14 +34,17 @@ public class MapService {
         Community community = communityRepository.findById(communityId)
                 .orElseThrow(()-> new BaseException(NOT_EXISTS_COMMUNITY));
 
+        System.out.println("아아" +req.getLongitude());
+
         Map map = Map.builder()
                 .x(req.getLongitude())
                 .y(req.getLatitude())
                 .address(new Address(req.getZipcode(),req.getRoadAddress(),req.getAddress()))
+                .alias(req.getAlias())
                 .build();
 
         //별칭을 작성한 사용자라면 alias 추가 저장
-        if(!req.getAlias().isEmpty()){
+        if(req.getAlias()!=null){
             map.addAlias(req.getAlias());
         }
 
@@ -55,6 +61,7 @@ public class MapService {
         return CommunityCreateLocationRes.toDto(map);
     }
 
+    @Transactional
     public CommunityUserLocationRes getUserLocation(Long userId, Long communityId){
 
         CommunityUserLocationRes communityUserLocationRes = null;

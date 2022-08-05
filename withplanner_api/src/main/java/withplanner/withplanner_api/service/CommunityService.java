@@ -53,6 +53,7 @@ public class CommunityService {
     }
 
 
+    @Transactional
     public CommunityGetInfoRes getCommunityInfo(Long communityId){
 
         //community 조회
@@ -61,7 +62,6 @@ public class CommunityService {
 
         CommunityGetInfoRes communityGetInfoRes = CommunityGetInfoRes.toDto(community);
         return communityGetInfoRes;
-
     }
 
 }

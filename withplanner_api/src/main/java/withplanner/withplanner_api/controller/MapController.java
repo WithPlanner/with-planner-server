@@ -9,6 +9,7 @@ import withplanner.withplanner_api.domain.User;
 import withplanner.withplanner_api.dto.community.CommunityCreateLocationReq;
 import withplanner.withplanner_api.dto.community.CommunityCreateLocationRes;
 import withplanner.withplanner_api.dto.community.CommunityUserLocationRes;
+import withplanner.withplanner_api.exception.BaseResponse;
 import withplanner.withplanner_api.service.CommunityService;
 import withplanner.withplanner_api.service.MapService;
 
@@ -24,11 +25,12 @@ public class MapController {
      * @param communityId
      */
     @PostMapping(value = "/community/loc/search/{communityId}")
-    public CommunityCreateLocationRes createLocation(@AuthenticationPrincipal User user, @PathVariable("communityId") Long communityId, @ModelAttribute CommunityCreateLocationReq reqDto){
+    public BaseResponse<CommunityCreateLocationRes> createLocation(@AuthenticationPrincipal User user, @PathVariable("communityId") Long communityId, @RequestBody CommunityCreateLocationReq reqDto){
         Long userId = user.getId();
 
+
         CommunityCreateLocationRes communityCreateLocationRes = mapService.createLocation(reqDto, userId, communityId);
-        return communityCreateLocationRes;
+        return new BaseResponse<>(communityCreateLocationRes);
     }
 
     /**
@@ -36,7 +38,7 @@ public class MapController {
      * @param communityId
      */
 //    @PostMapping(value="/community/loc/authenticate/{communityId}")
-//    public CommunityAuthenticateLocationRes authenticateLocation(@AuthenticationPrincipal User user, @PathVariable("communityId") Long communityId, @ModelAttribute CommunityAuthenticateLocationReq reqDto){
+//    public CommunityAuthenticateLocationRes authenticateLocation(@AuthenticationPrincipal User user, @PathVariable("communityId") Long communityId, @RequestBody CommunityAuthenticateLocationReq reqDto){
 //        Long userId = user.getId();
 
 //        CommunityAuthenticateLocationRes communityAuthenticateLocationRes = mapService.authenticateLocation(reqDto,userId,communityId);
@@ -49,11 +51,11 @@ public class MapController {
      * @param communityId
      */
     @GetMapping(value="/community/loc/user_location/{communityId}")
-    public CommunityUserLocationRes getUserLocation(@AuthenticationPrincipal User user, @PathVariable("communityId") Long communityId){
+    public BaseResponse<CommunityUserLocationRes> getUserLocation(@AuthenticationPrincipal User user, @PathVariable("communityId") Long communityId){
         Long userId = user.getId();
 
         CommunityUserLocationRes communityUserLocationRes = mapService.getUserLocation(userId, communityId);
-        return communityUserLocationRes;
+        return new BaseResponse<>(communityUserLocationRes);
 
     }
 

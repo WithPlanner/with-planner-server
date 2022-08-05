@@ -74,7 +74,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     //UserDetails 구현체 관련 코드 - 필수
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(joinColumns = @JoinColumn(name = "user_idx"))
     @Column(name="role")
     private List<String> roles = new ArrayList<>();

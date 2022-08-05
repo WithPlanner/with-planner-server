@@ -10,6 +10,7 @@ import withplanner.withplanner_api.dto.community.CommunityCreateLocationRes;
 import withplanner.withplanner_api.dto.community.CommunityGetInfoRes;
 import withplanner.withplanner_api.dto.community.CommunityMakeReq;
 import withplanner.withplanner_api.exception.BaseException;
+import withplanner.withplanner_api.exception.BaseResponse;
 import withplanner.withplanner_api.service.CommunityService;
 import withplanner.withplanner_api.service.MapService;
 
@@ -24,7 +25,7 @@ public class CommunityController {
     private final MapService mapService;
 
     @PostMapping(value = "/make/loc", consumes = {"multipart/form-data"})
-    public Long createMapCommunity(@ModelAttribute CommunityMakeReq reqDto) {
+    public Long createMapCommunity(@RequestBody CommunityMakeReq reqDto) {
         return communityService.createMapCoummunity(reqDto);
     }
 
@@ -34,12 +35,12 @@ public class CommunityController {
      * @param communityId
      */
     @GetMapping(value="/communitiy/loc/info/{communityId}")
-    public CommunityGetInfoRes getCommunityInfo(@AuthenticationPrincipal User user, @PathVariable("communityId") Long communityId){
+    public BaseResponse<CommunityGetInfoRes> getCommunityInfo(@AuthenticationPrincipal User user, @PathVariable("communityId") Long communityId){
         if(!user.isAccountNonExpired()){ //jwt 기한 만료시
             throw new BaseException(EXPIRED_JWT_TOKEN);
         }
         CommunityGetInfoRes communityGetInfoRes = communityService.getCommunityInfo(communityId);
-        return communityGetInfoRes;
+        return new BaseResponse<>(communityGetInfoRes);
     }
 
 

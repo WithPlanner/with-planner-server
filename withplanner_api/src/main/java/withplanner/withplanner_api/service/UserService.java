@@ -86,11 +86,13 @@ public class UserService implements UserDetailsService {
         return new AuthNumberRes(false, "인증번호가 틀렸습니다.");
     }
 
+    @Transactional
     public User findUserById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(()-> new UsernameNotFoundException("사용자를 찾을 수 없습니다. "));
     }
 
+    @Transactional
     //UserService 구현체 관련 코드 - 필수
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
