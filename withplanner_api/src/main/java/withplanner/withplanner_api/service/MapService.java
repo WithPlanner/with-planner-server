@@ -85,11 +85,11 @@ public class MapService {
         if(roadAddress==null){
             communityUserLocationRes = new CommunityUserLocationRes(nickname,x,y,alias,address);
         }
-        //도로명 주소가 존재하고 지번주소가 존재하지 않는 경우.
-        if(address == null){
+        //도로명 주소가 존재하는 경우
+        else {
             communityUserLocationRes = new CommunityUserLocationRes(nickname,x,y,alias,roadAddress);
-
         }
+
         return communityUserLocationRes;
     }
 
