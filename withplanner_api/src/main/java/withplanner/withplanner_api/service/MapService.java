@@ -4,14 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import withplanner.withplanner_api.domain.*;
-import withplanner.withplanner_api.dto.community.CommunityCreateLocationReq;
-import withplanner.withplanner_api.dto.community.CommunityCreateLocationRes;
-import withplanner.withplanner_api.dto.community.CommunityUserLocationRes;
+import withplanner.withplanner_api.dto.community.*;
 import withplanner.withplanner_api.exception.BaseException;
-import withplanner.withplanner_api.repository.CommunityMemberRepository;
-import withplanner.withplanner_api.repository.CommunityRepository;
-import withplanner.withplanner_api.repository.MapRepository;
-import withplanner.withplanner_api.repository.UserRepository;
+import withplanner.withplanner_api.repository.*;
+
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import static withplanner.withplanner_api.exception.BaseResponseStatus.*;
 
@@ -23,6 +21,8 @@ public class MapService {
     private final CommunityRepository communityRepository;
     private final UserRepository userRepository;
     private final CommunityMemberRepository communityMemberRepository;
+    private final MapPostRepository mapPostRepository;
+
 
     @Transactional
     public CommunityCreateLocationRes createLocation(CommunityCreateLocationReq req, Long userId, Long communityId){
@@ -91,6 +91,37 @@ public class MapService {
         }
 
         return communityUserLocationRes;
+    }
+
+    @Transactional
+    public CommunityAuthenticateLocationRes authenticateLocation(Long userId, Long communityId, CommunityAuthenticateLocationReq reqDto){
+        Boolean saveStatus = true;
+
+        //유저 조회
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new BaseException(NOT_EXISTS_PARTICIPANT));
+
+        //커뮤니티
+        Community community = communityRepository.findById(communityId)
+                .orElseThrow(()-> new BaseException(NOT_EXISTS_COMMUNITY));
+
+        //커뮤니티에 세팅된 인증 시간 조회 (localTime)
+        LocalTime localTime = community.getTime();
+
+        //지정한 시간 이후에 요청을 보내거나 거리계산값이 false이면 saveStatus를 false로 변경
+        if(!reqDto.getLocalDateTime().toLocalTime().isBefore(localTime)|!reqDto.getAuthenticationStatus().equals(true)){
+            saveStatus = false;
+        }
+
+        if(saveStatus==true){
+            MapPost mapPost = new MapPost();
+            mapPost.connectCommunity(community);
+            mapPost.connectUser(user);
+            mapPostRepository.save(mapPost);
+        }
+
+        CommunityAuthenticateLocationRes communityAuthenticateLocationRes = new CommunityAuthenticateLocationRes(saveStatus);
+        return communityAuthenticateLocationRes;
     }
 
 }

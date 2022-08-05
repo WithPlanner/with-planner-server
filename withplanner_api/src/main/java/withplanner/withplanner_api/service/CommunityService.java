@@ -18,6 +18,7 @@ import static withplanner.withplanner_api.exception.BaseResponseStatus.NOT_EXIST
 public class CommunityService {
     private final CommunityRepository communityRepository;
 
+/*
 
 //    private final S3Service s3Service;
     public Long createMapCoummunity(CommunityMakeReq reqDto) {
@@ -51,6 +52,7 @@ public class CommunityService {
 
         return communityRepository.save(community).getId();
     }
+*/
 
 
     @Transactional

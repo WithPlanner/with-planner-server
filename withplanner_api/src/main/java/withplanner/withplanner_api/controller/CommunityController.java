@@ -24,10 +24,10 @@ public class CommunityController {
     private final CommunityService communityService;
     private final MapService mapService;
 
-    @PostMapping(value = "/make/loc", consumes = {"multipart/form-data"})
+/*    @PostMapping(value = "/make/loc", consumes = {"multipart/form-data"})
     public Long createMapCommunity(@RequestBody CommunityMakeReq reqDto) {
         return communityService.createMapCoummunity(reqDto);
-    }
+    }*/
 
     /**
      * 커뮤니티 정보 불러오기 (jwt 토큰 필요)
@@ -36,7 +36,7 @@ public class CommunityController {
      */
     @GetMapping(value="/community/info/{communityId}")
     public BaseResponse<CommunityGetInfoRes> getCommunityInfo(@AuthenticationPrincipal User user, @PathVariable("communityId") Long communityId){
-        
+
         CommunityGetInfoRes communityGetInfoRes = communityService.getCommunityInfo(communityId);
         return new BaseResponse<>(communityGetInfoRes);
     }

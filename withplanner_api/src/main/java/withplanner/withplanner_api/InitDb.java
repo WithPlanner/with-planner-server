@@ -28,7 +28,7 @@ public class InitDb {
     @PostConstruct
     public void init(){
 
-        //initService.userInit();
+        initService.userInit();
         //initService.communityInit();
 
     }
@@ -82,7 +82,7 @@ public class InitDb {
 
         }
 
-        public void communityInit() {
+/*        public void communityInit() {
             List<String> days = new ArrayList<>();
             days.add("월");
             days.add("화");
@@ -108,7 +108,7 @@ public class InitDb {
 
             communityRepository.save(community1);
             communityRepository.save(community2);
-        }
+        }*/
 
 
     }
