@@ -2,6 +2,7 @@ package withplanner.withplanner_api.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import withplanner.withplanner_api.domain.Community;
 import withplanner.withplanner_api.domain.Post;
@@ -23,12 +24,13 @@ import static withplanner.withplanner_api.exception.BaseResponseStatus.NOT_EXIST
 @Service
 @RequiredArgsConstructor
 public class PostService {
-    private static CommunityRepository communityRepository;
-    private static UserRepository userRepository;
-    private static PostRepository postRepository;
-    private static PostImgRepository postImgRepository;
-//    private static S3Service s3Service;
+    private final CommunityRepository communityRepository;
+    private final UserRepository userRepository;
+    private final PostRepository postRepository;
+    private final PostImgRepository postImgRepository;
+//    private final S3Service s3Service;
 
+    @Transactional
     public ResultLongResp createPost(PostCreateReq reqDto, Long communityId, String username) {
 
         Community community = communityRepository.findById(communityId)
@@ -47,6 +49,7 @@ public class PostService {
         //사진이 있을 경우 이미저 저장해 연관관계 매핑
         if (reqDto.getImg() != null) {
             PostImg postImg = savePostImg(reqDto.getImg());
+            postImgRepository.save(postImg);
             post.addPostImg(postImg);
         }
 

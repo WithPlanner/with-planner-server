@@ -76,7 +76,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     //UserDetails 구현체 관련 코드 - 필수
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER) // 수정필요!
     @CollectionTable(joinColumns = @JoinColumn(name = "user_idx"))
     @Column(name="role")
     private List<String> roles = new ArrayList<>();
@@ -93,7 +93,7 @@ public class User extends BaseTimeEntity implements UserDetails {
     }
     @Override
     public String getUsername() {
-        return null;
+        return email;
     }
     @Override
     public boolean isAccountNonExpired() {

@@ -24,7 +24,6 @@ public class Community extends BaseTimeEntity{
 
     private Integer headCount; //최대인원
 
-    @Column(columnDefinition = "integer default 1")
     private Integer currentCount; //현재인원
 
     @ElementCollection
@@ -69,6 +68,7 @@ public class Community extends BaseTimeEntity{
         this.type = type;
 
         this.status = Status.ACTIVE;
+        this.currentCount = 1;
     }
 
     public void addUser(User user) {

@@ -95,6 +95,7 @@ public class UserService implements UserDetailsService {
 
     //UserService 구현체 관련 코드 - 필수
     @Override
+    @Transactional
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
        return userRepository.findByEmail(username)
                .orElseThrow(()-> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
