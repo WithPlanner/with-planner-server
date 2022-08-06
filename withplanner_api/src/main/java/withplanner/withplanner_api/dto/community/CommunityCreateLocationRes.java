@@ -14,6 +14,7 @@ public class CommunityCreateLocationRes {
     private String roadAddress; //도로명 주소
     private String address; //지번 주소
     private String alias; //별칭(nullable)
+    private String name; //상호명
 
     @Builder
     static public CommunityCreateLocationRes toDto(Map map){
@@ -25,6 +26,7 @@ public class CommunityCreateLocationRes {
                 .address(map.getAddress().getDetailedAddress())
                 .zipcode(map.getAddress().getZipcode())
                 .alias(map.getAlias())
+                .name(map.getName())
                 .build();
     }
 

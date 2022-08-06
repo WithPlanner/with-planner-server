@@ -41,6 +41,7 @@ public class MapService {
                 .y(req.getLatitude())
                 .address(new Address(req.getZipcode(),req.getRoadAddress(),req.getAddress()))
                 .alias(req.getAlias())
+                .name(req.getName())
                 .build();
 
         //별칭을 작성한 사용자라면 alias 추가 저장
@@ -80,14 +81,15 @@ public class MapService {
         String alias = communityMember.getMap().getAlias(); //목적지 별칭
         String roadAddress = communityMember.getMap().getAddress().getBaseAddress(); //도로명 주소
         String address = communityMember.getMap().getAddress().getDetailedAddress(); //지번 주소
+        String name = communityMember.getMap().getName(); //상호명
 
         //도로명 주소가 존재하지 않는 데이터인 경우
         if(roadAddress==null){
-            communityUserLocationRes = new CommunityUserLocationRes(nickname,x,y,alias,address);
+            communityUserLocationRes = new CommunityUserLocationRes(nickname,x,y,alias,address,name);
         }
         //도로명 주소가 존재하는 경우
         else {
-            communityUserLocationRes = new CommunityUserLocationRes(nickname,x,y,alias,roadAddress);
+            communityUserLocationRes = new CommunityUserLocationRes(nickname,x,y,alias,roadAddress,name);
         }
 
         return communityUserLocationRes;
