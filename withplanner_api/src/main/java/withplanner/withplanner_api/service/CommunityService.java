@@ -3,9 +3,7 @@ package withplanner.withplanner_api.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import withplanner.withplanner_api.domain.Community;
-import withplanner.withplanner_api.domain.Type;
-import withplanner.withplanner_api.domain.User;
+import withplanner.withplanner_api.domain.*;
 import withplanner.withplanner_api.dto.ResultLongResp;
 import withplanner.withplanner_api.dto.community.CommunityGetInfoRes;
 import withplanner.withplanner_api.dto.community.CommunityMakeReq;
@@ -146,9 +144,12 @@ public class CommunityService {
 
     }
 
+    @Transactional
     public MainListResp mainListing(User user) {
         //회원님을 위한 습관 모임
-        List<ListCardResp> recommendList = communityRepository.findTop6ByCategory(user.getRecommend()).stream().map(
+        String recommend = user.getRecommend();
+
+        List<ListCardResp> recommendList = communityRepository.findTop6ByCategory(Category.valueOf(recommend)).stream().map(
                 c -> ListCardResp.builder()
                         .communityId(c.getId())
                         .name(c.getName())
@@ -157,7 +158,11 @@ public class CommunityService {
         ).collect(Collectors.toList());
 
         //회원님이 참여하는 습관 모임
-        List<ListCardResp> myList = user.getCommunities().stream().map(
+        List<Community> myCommunities = communityMemberRepository.findByUserId(user.getId()).stream().map(
+                CommunityMember::getCommunity
+        ).collect(Collectors.toList());
+
+        List<ListCardResp> myList = myCommunities.stream().map(
                 c -> ListCardResp.builder()
                         .communityId(c.getId())
                         .name(c.getName())
