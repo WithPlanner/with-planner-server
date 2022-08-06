@@ -1,7 +1,9 @@
 package withplanner.withplanner_api.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -11,6 +13,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Post extends BaseTimeEntity{
     @Id
     @GeneratedValue
@@ -42,6 +45,7 @@ public class Post extends BaseTimeEntity{
     public Post(String name, String content) {
         this.name = name;
         this.content = content;
+        this.status = Status.ACTIVE;
     }
 
     public void addUser(User user) {

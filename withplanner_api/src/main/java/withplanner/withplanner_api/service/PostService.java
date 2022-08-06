@@ -9,14 +9,16 @@ import withplanner.withplanner_api.domain.Post;
 import withplanner.withplanner_api.domain.PostImg;
 import withplanner.withplanner_api.domain.User;
 import withplanner.withplanner_api.dto.ResultLongResp;
-import withplanner.withplanner_api.dto.ResultMsgResp;
-import withplanner.withplanner_api.dto.post.MainListResp;
+import withplanner.withplanner_api.dto.post.PostCardResp;
 import withplanner.withplanner_api.dto.post.PostCreateReq;
 import withplanner.withplanner_api.exception.BaseException;
 import withplanner.withplanner_api.repository.CommunityRepository;
 import withplanner.withplanner_api.repository.PostImgRepository;
 import withplanner.withplanner_api.repository.PostRepository;
 import withplanner.withplanner_api.repository.UserRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static withplanner.withplanner_api.exception.BaseResponseStatus.NOT_EXISTS_COMMUNITY;
 import static withplanner.withplanner_api.exception.BaseResponseStatus.NOT_EXISTS_PARTICIPANT;
@@ -67,5 +69,17 @@ public class PostService {
 //            String imgUrl = "https://gogumacat-s3.s3.ap-northeast-2.amazonaws.com/" + name;
         String imgUrl = "test";
         return new PostImg(imgUrl);
+    }
+
+    public List<PostCardResp> getAllPost(Long communityId){
+       return  postRepository.findByCommunityId(communityId).stream().map(
+                p -> PostCardResp.builder()
+                        .postId(p.getId())
+                        .name(p.getName())
+                        .content(p.getContent())
+                        .images(p.getImages())
+                        .writerNickname(p.getUser().getNickname())
+                        .build()
+        ).collect(Collectors.toList());
     }
 }

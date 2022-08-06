@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import withplanner.withplanner_api.domain.Community;
 import withplanner.withplanner_api.domain.Type;
 import withplanner.withplanner_api.domain.User;
+import withplanner.withplanner_api.dto.ResultLongResp;
 import withplanner.withplanner_api.dto.community.CommunityMakeReq;
 import withplanner.withplanner_api.dto.community.CommunityResp;
 import withplanner.withplanner_api.dto.post.ListCardResp;
@@ -32,7 +33,8 @@ public class CommunityService {
     private final CommunityMemberRepository communityMemberRepository;
 //    private final S3Service s3Service;
 
-    public Long createMapCommunity(CommunityMakeReq reqDto, String username) {
+    @Transactional
+    public ResultLongResp createMapCommunity(CommunityMakeReq reqDto, String username) {
         Community community;
 
         User user = userRepository.findByEmail(username)
@@ -67,12 +69,14 @@ public class CommunityService {
 
         user.addCommunity(community);
 
-        return communityRepository.save(community).getId();
+        Long postId = communityRepository.save(community).getId();
+        return new ResultLongResp(postId, "커뮤니티를 생성하였습니다.");
     }
 
-    public Long createPostCommunity(CommunityMakeReq reqDto, String username) {
+    @Transactional
+    public ResultLongResp createPostCommunity(CommunityMakeReq reqDto, String username) {
         Community community;
-
+        System.out.println("reqDto = " + reqDto);
         User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_EXISTS_PARTICIPANT));
 
@@ -105,7 +109,8 @@ public class CommunityService {
 
         user.addCommunity(community);
 
-        return communityRepository.save(community).getId();
+        Long postId = communityRepository.save(community).getId();
+        return new ResultLongResp(postId, "커뮤니티를 생성하였습니다.");
     }
 
     public CommunityResp getPostCommunityMain(Long communityId) {

@@ -18,9 +18,6 @@ public class PostController {
 
     @PostMapping(value = "/community/post/write/{communityIdx}", consumes = {"multipart/form-data"})
     public ResultLongResp createPost(@PathVariable Long communityIdx, @ModelAttribute PostCreateReq reqDto, @AuthenticationPrincipal User user) {
-        System.out.println("communityIdx = " + communityIdx);
-        System.out.println("reqDto = " + reqDto);
-        System.out.println("user = " + user.getUsername());
         return postService.createPost(reqDto, communityIdx, user.getUsername());
     }
 }
