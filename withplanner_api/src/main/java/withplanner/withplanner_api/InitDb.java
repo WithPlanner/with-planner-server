@@ -16,6 +16,7 @@ import withplanner.withplanner_api.service.UserService;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -28,7 +29,7 @@ public class InitDb {
     public void init(){
 
         initService.userInit();
-        initService.communityInit();
+        //initService.communityInit();
 
     }
 
@@ -65,6 +66,7 @@ public class InitDb {
                     .pwd("b")
                     .name("이름b")
                     .address(new Address("22222","서울시 성북구 성북동 1234번지","22동 22호"))
+                    .roles(Collections.singletonList("ROLE_USER"))
                     .build();
             userRepository.save(user2);
 
@@ -74,12 +76,13 @@ public class InitDb {
                     .pwd("c")
                     .name("이름c")
                     .address(new Address("33333","서울시 성북구 성북동 1234번지","33동 33호"))
+                    .roles(Collections.singletonList("ROLE_USER"))
                     .build();
             userRepository.save(user3);
 
         }
 
-        public void communityInit() {
+/*        public void communityInit() {
             List<String> days = new ArrayList<>();
             days.add("월");
             days.add("화");
@@ -105,7 +108,7 @@ public class InitDb {
 
             communityRepository.save(community1);
             communityRepository.save(community2);
-        }
+        }*/
 
 
     }

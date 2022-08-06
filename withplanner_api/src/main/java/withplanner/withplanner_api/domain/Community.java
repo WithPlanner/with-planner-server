@@ -3,6 +3,8 @@ package withplanner.withplanner_api.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +34,7 @@ public class Community extends BaseTimeEntity{
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    private String time; //인증시간
+    private LocalTime time; //인증시간
 
     @Enumerated(EnumType.STRING)
     private Type type;
@@ -57,7 +59,7 @@ public class Community extends BaseTimeEntity{
     }
 
     @Builder
-    public Community(String name, String introduce, String communityImg, Integer headCount, Category category, List<String> days, String time, Type type) {
+    public Community(String name, String introduce, String communityImg, Integer headCount, Category category, List<String> days, LocalTime time, Type type) {
         this.name = name;
         this.introduce = introduce;
         this.communityImg = communityImg;
@@ -66,6 +68,5 @@ public class Community extends BaseTimeEntity{
         this.days = days;
         this.time = time;
         this.type = type;
-
     }
 }

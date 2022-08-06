@@ -27,6 +27,8 @@ public enum BaseResponseStatus {
     NOT_EXISTS_EMAIL(false,2007,"존재하지 않는 이메일입니다."),
     NOT_EXISTS_COMMUNITY(false, 2008, "존재하지 않는 커뮤니티입니다."),
     EXCEED_HEAD_COUNT(false,2009,"커뮤니티의 최대 인원을 초과할 수 없습니다."),
+    NOT_EXISTS_COMMUNITY_MEMBER(false,2010,"존재하는 채팅방 참여 정보가 없습니다.(communityMember가 존재하지 않습니다.)"),
+    EXPIRED_JWT_TOKEN(false, 2011, "jwt가 만료되었습니다. 재로그인 바랍니다."),
 
     /**
      * 3000 : 홍서

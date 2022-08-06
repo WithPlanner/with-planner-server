@@ -38,7 +38,7 @@ public class CommunityMemberService {
         if(community.getCreateUser().equals(user)){
             authority = true;
         }
-
+        //현재 인원<최대인원 이면
         if(community.getCurrentCount()<community.getHeadCount()){
 
             //community의 currentCount +1
