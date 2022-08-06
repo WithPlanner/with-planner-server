@@ -3,6 +3,7 @@ package withplanner.withplanner_api.dto.community;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 import withplanner.withplanner_api.domain.Category;
 
@@ -19,6 +20,7 @@ public class CommunityMakeReq {
     private String category;
     private int headCount;
     private List<String> day;
+    @DateTimeFormat(pattern = "kk:mm:ss")
     private LocalTime time;
 
     public Category getCategory() {
