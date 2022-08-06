@@ -21,7 +21,9 @@ public class Map extends BaseTimeEntity {
 
     private Address address; //주소
 
-    private String alias;
+    private String alias; //별칭
+
+    private String name; //상호명 (ex. 성신여자대학교 수정관)
 
     @OneToOne(mappedBy = "map", fetch = FetchType.LAZY)
     private CommunityMember communityMember;
@@ -31,11 +33,12 @@ public class Map extends BaseTimeEntity {
     }
 
     @Builder
-    public Map(double x, double y, Address address, String alias){
+    public Map(double x, double y, Address address, String alias,String name){
         this.x=x;
         this.y=y;
         this.address = address;
         this.alias = alias;
+        this.name = name;
     }
 
     //Map에 CommunityMember연결
