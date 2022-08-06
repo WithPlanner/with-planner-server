@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 import withplanner.withplanner_api.domain.Category;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @Getter
@@ -18,7 +19,7 @@ public class CommunityMakeReq {
     private String category;
     private int headCount;
     private List<String> day;
-    private String time;
+    private LocalTime time;
 
     public Category getCategory() {
         switch (category) {

@@ -3,7 +3,6 @@ package withplanner.withplanner_api.domain;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,5 +67,16 @@ public class Community extends BaseTimeEntity{
         this.days = days;
         this.time = time;
         this.type = type;
+        this.status = Status.ACTIVE;
+        this.currentCount = 1;
+    }
+
+    public void addUser(User user) {
+        this.createUser = user;
+    }
+
+    public void addPost(Post post) {
+        posts.add(post);
+        post.addCommunity(this);
     }
 }

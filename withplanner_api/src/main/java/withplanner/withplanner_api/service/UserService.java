@@ -3,6 +3,7 @@ package withplanner.withplanner_api.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import withplanner.withplanner_api.domain.EmailAuth;
@@ -30,6 +31,7 @@ public class UserService implements UserDetailsService {
     public ResultMsgResp join(UserRequestDto userRequestDto, String role) {
         if (userRepository.existsByNickname(userRequestDto.getNickname()))
             return new ResultMsgResp("중복된 닉네임입니다.", false);
+
         User savedUser = userRepository.save(new User(userRequestDto,role));
         return new ResultMsgResp("회원가입에 성공하였습니다.", true);
     }
@@ -92,9 +94,9 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(()-> new UsernameNotFoundException("사용자를 찾을 수 없습니다. "));
     }
 
-    @Transactional
     //UserService 구현체 관련 코드 - 필수
     @Override
+    @Transactional
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
        return userRepository.findByEmail(username)
                .orElseThrow(()-> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
