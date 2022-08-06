@@ -35,9 +35,6 @@ public enum BaseResponseStatus {
      */
 
 
-
-
-
     INTERNAL_SERVER_ERROR(false,4000,"서버 오류입니다.");
 
 

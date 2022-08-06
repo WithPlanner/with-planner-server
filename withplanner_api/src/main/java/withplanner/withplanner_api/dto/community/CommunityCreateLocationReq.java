@@ -16,4 +16,5 @@ public class CommunityCreateLocationReq {
     private String roadAddress; //도로명 주소
     private String address; //지번 주소
     private String alias; //별칭(nullable)
+    private String name; //상호명
 }

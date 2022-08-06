@@ -26,7 +26,6 @@ public class MapController {
     public BaseResponse<CommunityCreateLocationRes> createLocation(@AuthenticationPrincipal User user, @PathVariable("communityId") Long communityId, @RequestBody CommunityCreateLocationReq reqDto){
         Long userId = user.getId();
 
-
         CommunityCreateLocationRes communityCreateLocationRes = mapService.createLocation(reqDto, userId, communityId);
         return new BaseResponse<>(communityCreateLocationRes);
     }
