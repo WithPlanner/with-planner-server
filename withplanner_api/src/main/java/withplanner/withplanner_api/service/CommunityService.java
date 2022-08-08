@@ -113,8 +113,12 @@ public class CommunityService {
 
         user.addCommunity(community);
 
-        Long postId = communityRepository.save(community).getId();
-        return new ResultLongResp(postId, "커뮤니티를 생성하였습니다.");
+        CommunityMember communityMember = new CommunityMember();
+        communityMember.connectCommunityMember(true, Status.ACTIVE, community, user);
+        communityMemberRepository.save(communityMember);
+
+        Long communityId = communityRepository.save(community).getId();
+        return new ResultLongResp(communityId, "커뮤니티를 생성하였습니다.");
     }
 
     public CommunityResp getPostCommunityMain(Long communityId) {
