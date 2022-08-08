@@ -17,6 +17,7 @@ import withplanner.withplanner_api.repository.CommunityMemberRepository;
 import withplanner.withplanner_api.repository.CommunityRepository;
 import withplanner.withplanner_api.repository.PostRepository;
 import withplanner.withplanner_api.repository.UserRepository;
+import withplanner.withplanner_api.util.S3Service;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -32,7 +33,7 @@ public class CommunityService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final CommunityMemberRepository communityMemberRepository;
-//    private final S3Service s3Service;
+    private final S3Service s3Service;
 
     @Transactional
     public ResultLongResp createMapCommunity(CommunityMakeReq reqDto, String username) {
@@ -42,10 +43,9 @@ public class CommunityService {
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_EXISTS_PARTICIPANT));
 
         if (reqDto.getCommunityImg() != null) {
-//            String name = s3Service.uploadToAWS(reqDto.getCommunityImg());
+            String name = s3Service.uploadToAWS(reqDto.getCommunityImg());
             //s3에 저장된 imgUrl 이를 저장하면 된다.
-//            String imgUrl = "https://gogumacat-s3.s3.ap-northeast-2.amazonaws.com/" + name;
-            String imgUrl = "test";
+            String imgUrl = "https://withplanner-s3.s3.ap-northeast-2.amazonaws.com/" + name;
             community = Community.builder()
                     .name(reqDto.getName())
                     .introduce(reqDto.getIntroduce())
@@ -82,10 +82,9 @@ public class CommunityService {
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_EXISTS_PARTICIPANT));
 
         if (reqDto.getCommunityImg() != null) {
-//            String name = s3Service.uploadToAWS(reqDto.getCommunityImg());
+            String name = s3Service.uploadToAWS(reqDto.getCommunityImg());
             //s3에 저장된 imgUrl 이를 저장하면 된다.
-//            String imgUrl = "https://gogumacat-s3.s3.ap-northeast-2.amazonaws.com/" + name;
-            String imgUrl = "test";
+            String imgUrl = "https://withplanner-s3.s3.ap-northeast-2.amazonaws.com/" + name;
             community = Community.builder()
                     .name(reqDto.getName())
                     .introduce(reqDto.getIntroduce())

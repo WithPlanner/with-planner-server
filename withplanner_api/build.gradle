@@ -26,8 +26,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 	//**database**
-	runtimeOnly 'mysql:mysql-connector-java'
-//	runtimeOnly 'com.h2database:h2'
+//	runtimeOnly 'mysql:mysql-connector-java'
+	runtimeOnly 'com.h2database:h2'
 
 	//**lombok**
 	annotationProcessor 'org.projectlombok:lombok'
@@ -53,8 +53,6 @@ dependencies {
 
 	// aws s3
 	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.239'
-	implementation 'com.amazonaws:aws-java-sdk-secretsmanager:1.12.239'
-	implementation 'com.amazonaws:aws-encryption-sdk-java:2.4.0'
 }
 
 tasks.named('test') {

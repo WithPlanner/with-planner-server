@@ -16,6 +16,7 @@ import withplanner.withplanner_api.repository.CommunityRepository;
 import withplanner.withplanner_api.repository.PostImgRepository;
 import withplanner.withplanner_api.repository.PostRepository;
 import withplanner.withplanner_api.repository.UserRepository;
+import withplanner.withplanner_api.util.S3Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +31,7 @@ public class PostService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final PostImgRepository postImgRepository;
-//    private final S3Service s3Service;
+    private final S3Service s3Service;
 
     @Transactional
     public ResultLongResp createPost(PostCreateReq reqDto, Long communityId, String username) {
@@ -64,10 +65,9 @@ public class PostService {
     }
 
     public PostImg savePostImg(MultipartFile imgFile) {
-//        String name = s3Service.uploadToAWS(imgFile);
+        String name = s3Service.uploadToAWS(imgFile);
         //s3에 저장된 imgUrl 이를 저장하면 된다.
-//            String imgUrl = "https://gogumacat-s3.s3.ap-northeast-2.amazonaws.com/" + name;
-        String imgUrl = "test";
+            String imgUrl = "https://withplanner-s3.s3.ap-northeast-2.amazonaws.com/" + name;
         return new PostImg(imgUrl);
     }
 
