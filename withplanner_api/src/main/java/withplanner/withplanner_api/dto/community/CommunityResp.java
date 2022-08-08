@@ -20,10 +20,12 @@ public class CommunityResp {
     private String category;
     private int headCount;
     private int currentCount;
+    private List<String> days;
+    private String time;
     private List<PostCardResp> posts;
 
     @Builder
-    public CommunityResp(Long communityId, String name, String createdAt, String introduce, String communityImg, String category, int headCount, int currentCount, List<PostCardResp> posts) {
+    public CommunityResp(Long communityId, String name, String createdAt, String introduce, String communityImg, String category, int headCount, int currentCount, List<String> days, String time, List<PostCardResp> posts) {
         this.communityId = communityId;
         this.name = name;
         this.createdAt = createdAt;
@@ -32,6 +34,8 @@ public class CommunityResp {
         this.category = category;
         this.headCount = headCount;
         this.currentCount = currentCount;
+        this.days = days;
+        this.time = time;
         this.posts = posts;
     }
 }

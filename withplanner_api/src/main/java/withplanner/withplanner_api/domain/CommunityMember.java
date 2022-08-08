@@ -39,6 +39,7 @@ public class CommunityMember extends BaseTimeEntity {
         this.status  = status;
         this.community = community;
         this.user = user;
+        community.addCommunityMember(this);
     }
 
     //연관관계 메서드
