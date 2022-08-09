@@ -6,10 +6,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import withplanner.withplanner_api.domain.User;
 import withplanner.withplanner_api.dto.ResultLongResp;
-import withplanner.withplanner_api.dto.post.MainListResp;
+import withplanner.withplanner_api.dto.post.PostCardResp;
 import withplanner.withplanner_api.dto.post.PostCreateReq;
 import withplanner.withplanner_api.exception.BaseResponse;
 import withplanner.withplanner_api.service.PostService;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,6 +22,12 @@ public class PostController {
     @PostMapping(value = "/community/post/write/{communityIdx}", consumes = {"multipart/form-data"})
     public BaseResponse<ResultLongResp> createPost(@PathVariable Long communityIdx, @ModelAttribute PostCreateReq reqDto, @AuthenticationPrincipal User user) {
         ResultLongResp result = postService.createPost(reqDto, communityIdx, user.getUsername());
+        return new BaseResponse<>(result);
+    }
+
+    @GetMapping("/community/post/all/{communityIdx}")
+    public BaseResponse<List<PostCardResp>> getAllPost(@PathVariable Long communityIdx) {
+        List<PostCardResp> result = postService.getAllPost(communityIdx);
         return new BaseResponse<>(result);
     }
 }
