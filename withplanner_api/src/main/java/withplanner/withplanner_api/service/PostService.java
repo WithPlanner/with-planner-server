@@ -35,7 +35,6 @@ public class PostService {
 
     @Transactional
     public ResultLongResp createPost(PostCreateReq reqDto, Long communityId, String username) {
-
         Community community = communityRepository.findById(communityId)
                 .orElseThrow(() -> new BaseException(NOT_EXISTS_COMMUNITY));
 
@@ -50,8 +49,11 @@ public class PostService {
         //연관관계 매핑
 
         //사진이 있을 경우 이미저 저장해 연관관계 매핑
+        System.out.println("reqDto.getImg() = " + reqDto.getImg());
         if (reqDto.getImg() != null) {
-            PostImg postImg = savePostImg(reqDto.getImg());
+            String name = s3Service.uploadToAWS(reqDto.getImg());
+            String imgUrl = "https://withplanner-s3.s3.ap-northeast-2.amazonaws.com/" + name;
+            PostImg postImg = new PostImg(imgUrl);
             postImgRepository.save(postImg);
             post.addPostImg(postImg);
         }
@@ -62,13 +64,6 @@ public class PostService {
         Post savedPost = postRepository.save(post);
 
         return new ResultLongResp(savedPost.getId(), "글 작성에 성공하였습니다.");
-    }
-
-    public PostImg savePostImg(MultipartFile imgFile) {
-        String name = s3Service.uploadToAWS(imgFile);
-        //s3에 저장된 imgUrl 이를 저장하면 된다.
-            String imgUrl = "https://withplanner-s3.s3.ap-northeast-2.amazonaws.com/" + name;
-        return new PostImg(imgUrl);
     }
 
     public List<PostCardResp> getAllPost(Long communityId){
