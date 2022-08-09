@@ -1,5 +1,6 @@
 package withplanner.withplanner_api.dto.community;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 import withplanner.withplanner_api.domain.Community;
@@ -19,7 +20,9 @@ public class CommunityGetInfoRes {
     private String introduce; //습관모임 소개
     private int headCount; //최대 인원
     private int currentCount; //현재 인원
-    private LocalDateTime createdAt; //습관모임 생성 날짜
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+    private String createdAt; //습관모임 생성 날짜
 
     @Builder
     static public CommunityGetInfoRes toDto(Community community){

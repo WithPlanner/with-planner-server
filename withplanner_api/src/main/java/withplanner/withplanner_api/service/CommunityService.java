@@ -137,7 +137,7 @@ public class CommunityService {
         return CommunityResp.builder()
                 .communityId(community.getId())
                 .name(community.getName())
-                .createdAt(community.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .createdAt(community.getCreatedAt())
                 .introduce(community.getIntroduce())
                 .communityImg(community.getCommunityImg())
                 .category(community.getCategory().toString())
