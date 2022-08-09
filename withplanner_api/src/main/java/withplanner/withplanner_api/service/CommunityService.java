@@ -5,9 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import withplanner.withplanner_api.domain.*;
 import withplanner.withplanner_api.dto.ResultLongResp;
-import withplanner.withplanner_api.dto.community.CommunityGetInfoRes;
-import withplanner.withplanner_api.dto.community.CommunityMakeReq;
-import withplanner.withplanner_api.dto.community.CommunityResp;
+import withplanner.withplanner_api.dto.community.*;
 import withplanner.withplanner_api.dto.post.ListCardResp;
 import withplanner.withplanner_api.dto.post.MainListResp;
 import withplanner.withplanner_api.dto.post.PostCardResp;
@@ -18,11 +16,10 @@ import withplanner.withplanner_api.repository.CommunityRepository;
 import withplanner.withplanner_api.repository.PostRepository;
 import withplanner.withplanner_api.repository.UserRepository;
 import withplanner.withplanner_api.util.S3Service;
-
+import withplanner.withplanner_api.repository.*;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import static withplanner.withplanner_api.exception.BaseResponseStatus.NOT_EXISTS_COMMUNITY;
 
 @Service
@@ -34,6 +31,7 @@ public class CommunityService {
     private final PostRepository postRepository;
     private final CommunityMemberRepository communityMemberRepository;
     private final S3Service s3Service;
+    private final MapPostRepository mapPostRepository;
 
     @Transactional
     public ResultLongResp createMapCommunity(CommunityMakeReq reqDto, String username) {
@@ -150,6 +148,46 @@ public class CommunityService {
                 .posts(posts)
                 .type(community.getType().toString())
                 .build();
+    }
+
+    //Map 커뮤니티 메인 조회
+    @Transactional
+    public CommunityMapRes getMapPostCommunityMain(Long communityId){
+
+        //커뮤니티 조회
+        Community community = communityRepository.findById(communityId)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_EXISTS_COMMUNITY));
+
+        //mapPost 조회
+        List<CommunityMapDto> list =  mapPostRepository.findTop6ByCommunityIdOrderByCreatedAtDesc(community.getId()).stream().map(
+                p -> CommunityMapDto.builder()
+                        .mapPostId(p.getId())
+                        .userId(p.getUser().getId())
+                        .updatedAt(p.getUpdatedAt())
+                        .location(communityMemberRepository.findCommunityByUserIdAndCommunityId(p.getUser().getId(),p.getCommunity().getId()).get().getMap().getAlias())
+                        .nickName(p.getUser().getNickname())
+                        .profileImg(p.getUser().getProfileImg())
+                        .build()
+        ).collect(Collectors.toList());
+
+        //res로 변환
+        CommunityMapRes communityMapRes = CommunityMapRes
+                .builder()
+                .mapPosts(list)
+                .communityId(community.getId())
+                .name(community.getName())
+                .createdAt(community.getCreatedAt())
+                .updatedAt(community.getUpdatedAt())
+                .introduce(community.getIntroduce())
+                .communityImg(community.getCommunityImg())
+                .category(community.getCategory().toString())
+                .headCount(community.getHeadCount())
+                .currentCount(community.getCurrentCount())
+                .time(community.getTime())
+                .days(community.getDays())
+                .build(); ;
+
+        return communityMapRes;
     }
 
     @Transactional

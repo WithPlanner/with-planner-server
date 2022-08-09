@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import withplanner.withplanner_api.dto.post.PostCardResp;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @Getter
@@ -35,8 +36,8 @@ public class CommunityResp {
         this.category = category;
         this.headCount = headCount;
         this.currentCount = currentCount;
-        this.days = days;
         this.time = time;
+        this.days = days;
         this.posts = posts;
         this.type = type;
     }
