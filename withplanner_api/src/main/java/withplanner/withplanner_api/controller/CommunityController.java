@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import withplanner.withplanner_api.domain.User;
 import withplanner.withplanner_api.dto.community.CommunityGetInfoRes;
 import withplanner.withplanner_api.dto.community.CommunityMakeReq;
+import withplanner.withplanner_api.dto.community.CommunityMapRes;
 import withplanner.withplanner_api.exception.BaseResponse;
 import withplanner.withplanner_api.dto.ResultLongResp;
 import withplanner.withplanner_api.dto.community.CommunityResp;
@@ -53,6 +54,12 @@ public class CommunityController {
     public BaseResponse<CommunityResp> getPostCommunityMain(@PathVariable Long communityIdx) {
         CommunityResp result = communityService.getPostCommunityMain(communityIdx);
         return new BaseResponse<>(result);
+    }
+
+    @GetMapping("/community/map_post/{communityIdx}")
+    public BaseResponse<CommunityMapRes> getMapPostCommunityMain(@AuthenticationPrincipal User user, @PathVariable Long communityIdx) {
+        CommunityMapRes communityMapRes = communityService.getMapPostCommunityMain(communityIdx);
+        return new BaseResponse<>(communityMapRes);
     }
 
     @GetMapping("/main")

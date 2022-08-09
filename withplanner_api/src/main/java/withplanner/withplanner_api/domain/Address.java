@@ -11,7 +11,7 @@ import javax.persistence.Embeddable;
 @Setter
 @NoArgsConstructor
 public class Address {
-    private String zipcode; //addr1 - 우편번호
+    String zipcode; //addr1 - 우편번호private
     private String baseAddress; //addr2 - 기본주소
     private String detailedAddress; //addr3 - 상세주소
 

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import withplanner.withplanner_api.dto.post.PostCardResp;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @Getter
@@ -20,10 +21,12 @@ public class CommunityResp {
     private String category;
     private int headCount;
     private int currentCount;
+    private LocalTime time; //인증하기로 한 시간
+    private List<String> days; //인증하기로 한 요일
     private List<PostCardResp> posts;
 
     @Builder
-    public CommunityResp(Long communityId, String name, String createdAt, String introduce, String communityImg, String category, int headCount, int currentCount, List<PostCardResp> posts) {
+    public CommunityResp(Long communityId, String name, String createdAt, String introduce, String communityImg, String category, int headCount, int currentCount, List<PostCardResp> posts, LocalTime time, List<String> days) {
         this.communityId = communityId;
         this.name = name;
         this.createdAt = createdAt;
@@ -32,6 +35,8 @@ public class CommunityResp {
         this.category = category;
         this.headCount = headCount;
         this.currentCount = currentCount;
+        this.time = time;
+        this.days = days;
         this.posts = posts;
     }
 }
