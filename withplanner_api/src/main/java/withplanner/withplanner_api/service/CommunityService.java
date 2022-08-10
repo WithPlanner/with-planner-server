@@ -19,6 +19,7 @@ import withplanner.withplanner_api.util.RecommendCategory;
 import withplanner.withplanner_api.util.S3Service;
 import withplanner.withplanner_api.repository.*;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import static withplanner.withplanner_api.exception.BaseResponseStatus.NOT_EXISTS_COMMUNITY;
@@ -195,6 +196,7 @@ public class CommunityService {
     public MainListResp mainListing(User user) {
         //회원님을 위한 습관 모임
         String recommend = RecommendCategory.recommend(user.getRecommend());
+        List<Long> myCommunityId = new ArrayList<>();
 
         List<ListCardResp> recommendList = communityRepository.findTop6ByCategory(Category.valueOf(recommend)).stream().map(
                 c -> ListCardResp.builder()
@@ -212,14 +214,16 @@ public class CommunityService {
         ).collect(Collectors.toList());
 
         List<ListCardResp> myList = myCommunities.stream().map(
-                c -> ListCardResp.builder()
-                        .communityId(c.getId())
-                        .name(c.getName())
-                        .communityImg(c.getCommunityImg())
-                        .type(c.getType().toString())
-                        .category(c.getCategory().toString())
-                        .build()
-        ).collect(Collectors.toList());
+                c -> {
+                    myCommunityId.add(c.getId());
+                    return ListCardResp.builder()
+                            .communityId(c.getId())
+                            .name(c.getName())
+                            .communityImg(c.getCommunityImg())
+                            .type(c.getType().toString())
+                            .category(c.getCategory().toString())
+                            .build();
+                }).collect(Collectors.toList());
 
         //가장 활성화된 습관 모임
         List<ListCardResp> hotList = communityRepository.findTop6ByOrderByCurrentCountDesc().stream().map(
@@ -242,6 +246,10 @@ public class CommunityService {
                         .category(c.getCategory().toString())
                         .build()
         ).collect(Collectors.toList());
+
+        deleteDup(myCommunityId, recommendList);
+        deleteDup(myCommunityId, hotList);
+        deleteDup(myCommunityId, newList);
 
         return new MainListResp(recommendList, myList, hotList, newList);
     }
@@ -268,6 +276,12 @@ public class CommunityService {
 
         CommunityGetInfoRes communityGetInfoRes = CommunityGetInfoRes.toDto(community);
         return communityGetInfoRes;
+    }
+
+    //만약 비교리스트에 내가 참여한 커뮤니티가 포함되어있으면 삭제
+    private List<ListCardResp> deleteDup(List<Long> myCommunityId, List<ListCardResp> compareList) {
+        compareList.removeIf(c -> myCommunityId.contains(c.getCommunityId()));
+        return compareList;
     }
 
 }

@@ -1,6 +1,7 @@
 package withplanner.withplanner_api.domain;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Investigation extends BaseTimeEntity {
     @Id
     @GeneratedValue
