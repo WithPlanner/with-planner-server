@@ -18,14 +18,10 @@ public class EmailAuth {
     private static final Long MAX_EXPIRE_TIME = 5L;//5분
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     private String email;
     private int authNumber;
     private Boolean expired;
     private LocalDateTime expireDate;
-
 
     @Builder
     public EmailAuth(String email, int authNumber, Boolean expired) {

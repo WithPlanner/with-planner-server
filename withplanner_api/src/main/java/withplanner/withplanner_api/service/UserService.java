@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import withplanner.withplanner_api.domain.Community;
 import withplanner.withplanner_api.domain.EmailAuth;
 import withplanner.withplanner_api.domain.User;
+import withplanner.withplanner_api.dto.ResultLongResp;
 import withplanner.withplanner_api.dto.ResultMsgResp;
 import withplanner.withplanner_api.dto.UserRequestDto;
 import withplanner.withplanner_api.dto.join.AuthNumberRes;
@@ -35,12 +36,12 @@ public class UserService implements UserDetailsService {
     private final AuthEmailSender authMailSender;
     private final EmailRepository emailRepository;
 
-    public ResultMsgResp join(UserRequestDto userRequestDto, String role) {
+    public ResultLongResp join(UserRequestDto userRequestDto, String role) {
         if (userRepository.existsByNickname(userRequestDto.getNickname()))
-            return new ResultMsgResp("중복된 닉네임입니다.", false);
+            return new ResultLongResp(-1L, "회원가입에 실패하였습니다.");
 
         User savedUser = userRepository.save(new User(userRequestDto,role));
-        return new ResultMsgResp("회원가입에 성공하였습니다.", true);
+        return new ResultLongResp(savedUser.getId(), "회원가입에 성공하였습니다.");
     }
 
     public boolean checkDupEmail(String email) {

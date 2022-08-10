@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import withplanner.withplanner_api.domain.User;
 
+import withplanner.withplanner_api.dto.ResultLongResp;
 import withplanner.withplanner_api.dto.ResultMsgResp;
 import withplanner.withplanner_api.dto.UserRequestDto;
 import withplanner.withplanner_api.dto.join.AuthNumberRes;
@@ -36,11 +37,12 @@ public class UserController {
      * 회원가입 + 닉네임 중복확인
      */
     @PostMapping("/sign_up/submit")
-    public ResultMsgResp join(@RequestBody UserRequestDto userRequestDto) {
+    public BaseResponse<ResultLongResp> join(@RequestBody UserRequestDto userRequestDto) {
         passwordEncoder.encode(userRequestDto.getPw());
         userRequestDto.encodePassword(passwordEncoder.encode(userRequestDto.getPw()));
         String role = "ROLE_USER";
-        return userService.join(userRequestDto,role);
+        ResultLongResp result = userService.join(userRequestDto, role);
+        return new BaseResponse<>(result);
     }
 
     /**
