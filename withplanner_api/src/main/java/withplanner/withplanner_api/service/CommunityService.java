@@ -15,6 +15,7 @@ import withplanner.withplanner_api.repository.CommunityMemberRepository;
 import withplanner.withplanner_api.repository.CommunityRepository;
 import withplanner.withplanner_api.repository.PostRepository;
 import withplanner.withplanner_api.repository.UserRepository;
+import withplanner.withplanner_api.util.RecommendCategory;
 import withplanner.withplanner_api.util.S3Service;
 import withplanner.withplanner_api.repository.*;
 import java.time.format.DateTimeFormatter;
@@ -193,7 +194,7 @@ public class CommunityService {
     @Transactional
     public MainListResp mainListing(User user) {
         //회원님을 위한 습관 모임
-        String recommend = user.getRecommend();
+        String recommend = RecommendCategory.recommend(user.getRecommend());
 
         List<ListCardResp> recommendList = communityRepository.findTop6ByCategory(Category.valueOf(recommend)).stream().map(
                 c -> ListCardResp.builder()

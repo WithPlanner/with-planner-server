@@ -1,4 +1,5 @@
 package withplanner.withplanner_api.domain;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,4 +29,20 @@ public class Investigation extends BaseTimeEntity {
     @OneToOne(mappedBy = "investigation", fetch = FetchType.LAZY)
     private User user;
 
+    @Builder
+    public Investigation(Integer q1, Integer q2, Integer q3, Integer q4, Integer q5, Integer q6, Integer q7, Integer q8) {
+        this.q1 = q1;
+        this.q2 = q2;
+        this.q3 = q3;
+        this.q4 = q4;
+        this.q5 = q5;
+        this.q6 = q6;
+        this.q7 = q7;
+        this.q8 = q8;
+        this.status = Status.ACTIVE;
+    }
+
+    public void addUser(User user) {
+        this.user = user;
+    }
 }

@@ -121,5 +121,13 @@ public class User extends BaseTimeEntity implements UserDetails {
         post.addUser(this);
     }
 
+    public void addInvestigation(Investigation investigation) {
+        this.investigation = investigation;
+        investigation.addUser(this);
+    }
+    public void addRecommend(String category) {
+        this.recommend = category;
+    }
+
 
 }
