@@ -202,6 +202,7 @@ public class CommunityService {
                         .name(c.getName())
                         .communityImg(c.getCommunityImg())
                         .type(c.getType().toString())
+                        .category(c.getCategory().toString())
                         .build()
         ).collect(Collectors.toList());
 
@@ -216,6 +217,7 @@ public class CommunityService {
                         .name(c.getName())
                         .communityImg(c.getCommunityImg())
                         .type(c.getType().toString())
+                        .category(c.getCategory().toString())
                         .build()
         ).collect(Collectors.toList());
 
@@ -226,6 +228,7 @@ public class CommunityService {
                         .name(c.getName())
                         .communityImg(c.getCommunityImg())
                         .type(c.getType().toString())
+                        .category(c.getCategory().toString())
                         .build()
         ).collect(Collectors.toList());
 
@@ -236,6 +239,7 @@ public class CommunityService {
                         .name(c.getName())
                         .communityImg(c.getCommunityImg())
                         .type(c.getType().toString())
+                        .category(c.getCategory().toString())
                         .build()
         ).collect(Collectors.toList());
 
@@ -249,6 +253,7 @@ public class CommunityService {
                         .name(c.getName())
                         .communityImg(c.getCommunityImg())
                         .type(c.getType().toString())
+                        .category(c.getCategory().toString())
                         .build()
         ).collect(Collectors.toList());
     }

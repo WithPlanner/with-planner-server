@@ -2,6 +2,7 @@ package withplanner.withplanner_api.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,9 @@ import withplanner.withplanner_api.dto.join.AuthNumberRes;
 import withplanner.withplanner_api.dto.join.EmailAuthRes;
 import withplanner.withplanner_api.dto.login.LoginReq;
 import withplanner.withplanner_api.dto.login.LoginRes;
+import withplanner.withplanner_api.dto.user.MyPageResp;
 import withplanner.withplanner_api.exception.BaseException;
+import withplanner.withplanner_api.exception.BaseResponse;
 import withplanner.withplanner_api.exception.BaseResponseStatus;
 import withplanner.withplanner_api.jwt.JwtTokenProvider;
 import withplanner.withplanner_api.repository.UserRepository;
@@ -88,6 +91,12 @@ public class UserController {
         }
 
         return new LoginRes(jwtTokenProvider.createToken(user.getId(),user.getRoles()));
+    }
+
+    @GetMapping("/mypage")
+    public BaseResponse<MyPageResp> myPageLisitng(@AuthenticationPrincipal User user) {
+        MyPageResp result = userService.myPageListing(user.getEmail());
+        return new BaseResponse<>(result);
     }
 
 }
