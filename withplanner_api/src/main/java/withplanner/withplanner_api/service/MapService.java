@@ -8,8 +8,13 @@ import withplanner.withplanner_api.dto.community.*;
 import withplanner.withplanner_api.exception.BaseException;
 import withplanner.withplanner_api.repository.*;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.TextStyle;
+import java.util.List;
+import java.util.Locale;
 
 import static withplanner.withplanner_api.exception.BaseResponseStatus.*;
 
@@ -34,12 +39,11 @@ public class MapService {
         Community community = communityRepository.findById(communityId)
                 .orElseThrow(()-> new BaseException(NOT_EXISTS_COMMUNITY));
 
-        System.out.println("아아" +req.getLongitude());
 
         Map map = Map.builder()
                 .x(req.getLongitude())
                 .y(req.getLatitude())
-                .address(new Address(req.getZipcode(),req.getRoadAddress(),req.getAddress()))
+                .location(new Location(req.getRoadAddress(),req.getAddress()))
                 .alias(req.getAlias())
                 .name(req.getName())
                 .build();
@@ -79,8 +83,8 @@ public class MapService {
         double x = communityMember.getMap().getX(); //경도
         double y= communityMember.getMap().getY(); //위도
         String alias = communityMember.getMap().getAlias(); //목적지 별칭
-        String roadAddress = communityMember.getMap().getAddress().getBaseAddress(); //도로명 주소
-        String address = communityMember.getMap().getAddress().getDetailedAddress(); //지번 주소
+        String roadAddress = communityMember.getMap().getLocation().getRoadAddress(); //도로명 주소
+        String address = communityMember.getMap().getLocation().getAddress(); //지번 주소
         String name = communityMember.getMap().getName(); //상호명
 
         //도로명 주소가 존재하지 않는 데이터인 경우
@@ -109,6 +113,23 @@ public class MapService {
 
         //커뮤니티에 세팅된 인증 시간 조회 (localTime)
         LocalTime localTime = community.getTime();
+
+        //커뮤니티에 세팅된 인증 요일 조회
+        List<String> days = community.getDays();
+
+        //요청을 보낸 localDateTime이 인증 요일에 해당하는지 확인 - 아니면 Throw
+        LocalDate localDate = reqDto.getLocalDateTime().toLocalDate();
+        DayOfWeek dayOfWeek = localDate.getDayOfWeek();
+        String today = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN);
+        if(!days.contains(today)){
+            throw new BaseException(NOT_AUTHENTICATE_DAY);
+        }
+
+        //요청을 보낸 localDateTime이 당일인지 여부 확인
+        LocalDate now = LocalDate.now();
+        if(!now.isEqual(reqDto.getLocalDateTime().toLocalDate())){
+            saveStatus = false;
+        }
 
         //지정한 시간 이후에 요청을 보내거나 거리계산값이 false이면 saveStatus를 false로 변경
         if(!reqDto.getLocalDateTime().toLocalTime().isBefore(localTime)|!reqDto.getAuthenticationStatus().equals(true)){
