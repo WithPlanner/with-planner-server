@@ -8,8 +8,13 @@ import withplanner.withplanner_api.dto.community.*;
 import withplanner.withplanner_api.exception.BaseException;
 import withplanner.withplanner_api.repository.*;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.TextStyle;
+import java.util.List;
+import java.util.Locale;
 
 import static withplanner.withplanner_api.exception.BaseResponseStatus.*;
 
@@ -108,6 +113,23 @@ public class MapService {
 
         //커뮤니티에 세팅된 인증 시간 조회 (localTime)
         LocalTime localTime = community.getTime();
+
+        //커뮤니티에 세팅된 인증 요일 조회
+        List<String> days = community.getDays();
+
+        //요청을 보낸 localDateTime이 인증 요일에 해당하는지 확인 - 아니면 Throw
+        LocalDate localDate = reqDto.getLocalDateTime().toLocalDate();
+        DayOfWeek dayOfWeek = localDate.getDayOfWeek();
+        String today = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.KOREAN);
+        if(!days.contains(today)){
+            throw new BaseException(NOT_AUTHENTICATE_DAY);
+        }
+
+        //요청을 보낸 localDateTime이 당일인지 여부 확인
+        LocalDate now = LocalDate.now();
+        if(!now.isEqual(reqDto.getLocalDateTime().toLocalDate())){
+            saveStatus = false;
+        }
 
         //지정한 시간 이후에 요청을 보내거나 거리계산값이 false이면 saveStatus를 false로 변경
         if(!reqDto.getLocalDateTime().toLocalTime().isBefore(localTime)|!reqDto.getAuthenticationStatus().equals(true)){
