@@ -1,8 +1,6 @@
 package withplanner.withplanner_api.service;
 
-import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
-import org.json.JSONObject;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
