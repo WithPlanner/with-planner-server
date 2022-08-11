@@ -20,6 +20,7 @@ public class CommunityGetInfoRes {
     private String introduce; //습관모임 소개
     private int headCount; //최대 인원
     private int currentCount; //현재 인원
+    private String type; //mapPost, post 타입
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private String createdAt; //습관모임 생성 날짜
@@ -32,6 +33,7 @@ public class CommunityGetInfoRes {
                 .introduce(community.getIntroduce())
                 .headCount(community.getHeadCount())
                 .currentCount(community.getCurrentCount())
+                .type(community.getType().toString())
                 .createdAt(community.getCreatedAt())
                 .build();
     }
