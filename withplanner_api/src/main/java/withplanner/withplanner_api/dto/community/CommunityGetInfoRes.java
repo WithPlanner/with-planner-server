@@ -7,6 +7,8 @@ import withplanner.withplanner_api.domain.Community;
 import withplanner.withplanner_api.domain.Map;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 @Data
@@ -20,10 +22,13 @@ public class CommunityGetInfoRes {
     private String introduce; //습관모임 소개
     private int headCount; //최대 인원
     private int currentCount; //현재 인원
-    private String type; //mapPost, post 타입
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
-    private String createdAt; //습관모임 생성 날짜
+    private String type; //mapPost, post 타입
+    private LocalTime time; //인증하기로 한 시간
+    private List<String> days; //인증하기로 한 요일
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+    private String createdAt; //습관모임 생성 날짜(요일만 보내줌)
 
     @Builder
     static public CommunityGetInfoRes toDto(Community community){
@@ -34,6 +39,8 @@ public class CommunityGetInfoRes {
                 .headCount(community.getHeadCount())
                 .currentCount(community.getCurrentCount())
                 .type(community.getType().toString())
+                .time(community.getTime())
+                .days(community.getDays())
                 .createdAt(community.getCreatedAt())
                 .build();
     }

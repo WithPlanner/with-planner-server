@@ -50,6 +50,7 @@ public class CommunityMemberService {
         else{
             throw new BaseException(EXCEED_HEAD_COUNT);
         }
+        communityMemberRepository.save(communityMember);
 
         return new CommunityJoinRes(community.getId(),user.getId());
     }

@@ -37,7 +37,6 @@ public class InvestigationService {
 
         String response = responseEntity.getBody(); //추천 카테고리 결과
 
-
         Investigation investigation = Investigation.builder()
                 .q1(investReq.getQ1())
                 .q2(investReq.getQ2())
