@@ -24,7 +24,7 @@ public class InvestigationService {
 
     @Transactional
     public ResultMsgResp invest(InvestReq investReq) {
-        String url = "http://localhost:5000/invest?";
+        String url = "http://hongseos.shop/invest?";
 
         RestTemplate rest = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
