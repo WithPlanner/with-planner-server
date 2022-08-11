@@ -34,12 +34,11 @@ public class MapService {
         Community community = communityRepository.findById(communityId)
                 .orElseThrow(()-> new BaseException(NOT_EXISTS_COMMUNITY));
 
-        System.out.println("아아" +req.getLongitude());
 
         Map map = Map.builder()
                 .x(req.getLongitude())
                 .y(req.getLatitude())
-                .address(new Address(req.getZipcode(),req.getRoadAddress(),req.getAddress()))
+                .location(new Location(req.getRoadAddress(),req.getAddress()))
                 .alias(req.getAlias())
                 .name(req.getName())
                 .build();
@@ -79,8 +78,8 @@ public class MapService {
         double x = communityMember.getMap().getX(); //경도
         double y= communityMember.getMap().getY(); //위도
         String alias = communityMember.getMap().getAlias(); //목적지 별칭
-        String roadAddress = communityMember.getMap().getAddress().getBaseAddress(); //도로명 주소
-        String address = communityMember.getMap().getAddress().getDetailedAddress(); //지번 주소
+        String roadAddress = communityMember.getMap().getLocation().getRoadAddress(); //도로명 주소
+        String address = communityMember.getMap().getLocation().getAddress(); //지번 주소
         String name = communityMember.getMap().getName(); //상호명
 
         //도로명 주소가 존재하지 않는 데이터인 경우

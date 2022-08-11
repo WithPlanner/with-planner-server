@@ -19,7 +19,8 @@ public class Map extends BaseTimeEntity {
     private double x ; //경도
     private double y ; //위도
 
-    private Address address; //주소
+//    private Address address; //주소
+    private Location location;
 
     private String alias; //별칭
 
@@ -33,13 +34,14 @@ public class Map extends BaseTimeEntity {
     }
 
     @Builder
-    public Map(double x, double y, Address address, String alias,String name){
+    public Map(double x, double y, Location location, String alias,String name){
         this.x=x;
         this.y=y;
-        this.address = address;
+        this.location = location;
         this.alias = alias;
         this.name = name;
     }
+
 
     //Map에 CommunityMember연결
     public void setCommunityMember(CommunityMember communityMember){
