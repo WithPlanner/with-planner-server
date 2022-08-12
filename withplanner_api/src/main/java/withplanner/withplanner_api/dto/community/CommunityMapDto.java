@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import withplanner.withplanner_api.domain.PostImg;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
