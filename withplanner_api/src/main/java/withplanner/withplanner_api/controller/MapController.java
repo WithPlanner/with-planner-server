@@ -7,9 +7,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import withplanner.withplanner_api.domain.User;
 import withplanner.withplanner_api.dto.community.*;
+import withplanner.withplanner_api.dto.post.PostCardResp;
 import withplanner.withplanner_api.exception.BaseResponse;
 import withplanner.withplanner_api.service.CommunityService;
 import withplanner.withplanner_api.service.MapService;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -53,6 +56,16 @@ public class MapController {
 
         CommunityUserLocationRes communityUserLocationRes = mapService.getUserLocation(userId, communityId);
         return new BaseResponse<>(communityUserLocationRes);
+    }
+
+    /**
+     * mapPost 게시물 전체 가져오기
+     * @param communityIdx
+     */
+    @GetMapping("/community/map-post/all/{communityIdx}")
+    public BaseResponse<List<CommunityMapDto>> getAllMapPost(@PathVariable Long communityIdx) {
+        List<CommunityMapDto> result = mapService.getAllMapPost(communityIdx);
+        return new BaseResponse<>(result);
     }
 
 }

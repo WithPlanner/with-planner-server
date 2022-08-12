@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import withplanner.withplanner_api.domain.*;
 import withplanner.withplanner_api.dto.community.*;
+import withplanner.withplanner_api.dto.post.PostCardResp;
 import withplanner.withplanner_api.exception.BaseException;
+import withplanner.withplanner_api.exception.BaseResponseStatus;
 import withplanner.withplanner_api.repository.*;
 
 import java.time.DayOfWeek;
@@ -15,6 +17,7 @@ import java.time.LocalTime;
 import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import static withplanner.withplanner_api.exception.BaseResponseStatus.*;
 
@@ -146,5 +149,28 @@ public class MapService {
         CommunityAuthenticateLocationRes communityAuthenticateLocationRes = new CommunityAuthenticateLocationRes(saveStatus);
         return communityAuthenticateLocationRes;
     }
+
+    //MapPost 전체 가져오기
+    @Transactional
+    public List<CommunityMapDto> getAllMapPost(Long communityId){
+
+        //커뮤니티 조회
+        Community community = communityRepository.findById(communityId)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_EXISTS_COMMUNITY));
+
+        //mapPost 조회
+        List<CommunityMapDto> list =  mapPostRepository.findByCommunityId(community.getId()).stream().map(
+                p -> CommunityMapDto.builder()
+                        .mapPostId(p.getId())
+                        .userId(p.getUser().getId())
+                        .updatedAt(p.getUpdatedAt())
+                        .location(communityMemberRepository.findCommunityByUserIdAndCommunityId(p.getUser().getId(),p.getCommunity().getId()).get().getMap().getAlias())
+                        .nickName(p.getUser().getNickname())
+                        .profileImg(p.getUser().getProfileImg())
+                        .build()
+        ).collect(Collectors.toList());
+
+        return list; }
+
 
 }

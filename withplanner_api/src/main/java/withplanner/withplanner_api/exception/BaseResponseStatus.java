@@ -30,6 +30,8 @@ public enum BaseResponseStatus {
     NOT_EXISTS_COMMUNITY_MEMBER(false,2010,"존재하는 채팅방 참여 정보가 없습니다.(communityMember가 존재하지 않습니다.)"),
     EXPIRED_JWT_TOKEN(false, 2011, "jwt가 만료되었습니다. 재로그인 바랍니다."),
     NOT_AUTHENTICATE_DAY(false, 2012, "인증 요일이 아닙니다."),
+    NOT_EXISTS_MAP_POST(false, 2013, "존재하는 위치 인증 게시물이 없습니다."),
+    NOT_EXISTS_POST(false, 2014, "존재하는 글 인증 게시물이 없습니다."),
 
     /**
      * 3000 : 홍서
