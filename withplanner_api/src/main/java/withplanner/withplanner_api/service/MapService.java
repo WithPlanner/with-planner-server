@@ -1,5 +1,6 @@
 package withplanner.withplanner_api.service;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +31,7 @@ public class MapService {
     private final UserRepository userRepository;
     private final CommunityMemberRepository communityMemberRepository;
     private final MapPostRepository mapPostRepository;
+    private final CommentRepository commentRepository;
 
 
     @Transactional
@@ -171,6 +173,40 @@ public class MapService {
         ).collect(Collectors.toList());
 
         return list; }
+
+    public CommunityMapPostDetailRes getDetailMapPost(Long userId, Long mapPostId){
+
+        //사용지
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new BaseException(NOT_EXISTS_PARTICIPANT));
+
+        //지도 게시글
+        MapPost mapPost = mapPostRepository.findById(mapPostId)
+                .orElseThrow(()-> new BaseException(BaseResponseStatus.NOT_EXISTS_MAP_POST));
+
+        //댓글 리스트 조회
+        List<CommunityCommentDto> comments = commentRepository.findCommentByMapPostId(mapPost.getId())
+                .stream().map(
+                        p -> CommunityCommentDto.builder()
+                                .commentId(p.getId())
+                                .nickname(p.getUser().getNickname())
+                                .comment(p.getContent())
+                                .createdAt(p.getCreatedAt())
+                                .build()
+                ).collect(Collectors.toList());
+
+        CommunityMapPostDetailRes communityMapPostDetailRes = CommunityMapPostDetailRes.builder()
+                .mapPostId(mapPost.getId())
+                .userId(mapPost.getUser().getId())
+                .updatedAt(mapPost.getUpdatedAt())
+                .location(communityMemberRepository.findCommunityByUserIdAndCommunityId(mapPost.getUser().getId(),mapPost.getCommunity().getId()).get().getMap().getAlias())
+                .nickName(mapPost.getUser().getNickname())
+                .comments(comments)
+                .build();
+        System.out.println("여까지 잘됨ㅇ");
+
+        return communityMapPostDetailRes;
+    }
 
 
 }

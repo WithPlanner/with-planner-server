@@ -32,6 +32,7 @@ public class PostController {
         return new BaseResponse<>(result);
     }
 
+    //게시물 상세 조회
     @GetMapping("/community/post/detail/{postIdx}")
     public BaseResponse<CommunityPostDetailRes> getDetailPost(@PathVariable Long postIdx, @AuthenticationPrincipal User user){
         Long userId = user.getId();
