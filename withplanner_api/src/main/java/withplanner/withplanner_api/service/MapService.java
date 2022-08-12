@@ -161,7 +161,7 @@ public class MapService {
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NOT_EXISTS_COMMUNITY));
 
         //mapPost 조회
-        List<CommunityMapDto> list =  mapPostRepository.findByCommunityId(community.getId()).stream().map(
+        List<CommunityMapDto> list =  mapPostRepository.findByCommunityIdOrderByUpdatedAtDesc(community.getId()).stream().map(
                 p -> CommunityMapDto.builder()
                         .mapPostId(p.getId())
                         .userId(p.getUser().getId())

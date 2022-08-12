@@ -65,7 +65,7 @@ public class PostService {
     }
 
     public List<PostCardResp> getAllPost(Long communityId){
-       return  postRepository.findByCommunityId(communityId).stream().map(
+       return  postRepository.findByCommunityIdOrderByUpdatedAtDesc(communityId).stream().map(
                 p -> PostCardResp.builder()
                         .postId(p.getId())
                         .name(p.getName())

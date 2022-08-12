@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface MapPostRepository extends JpaRepository<MapPost, Long> {
     List<MapPost> findTop6ByCommunityIdOrderByCreatedAtDesc(Long communityId);
-    List<MapPost> findByCommunityId(Long communityId);
+    List<MapPost> findByCommunityIdOrderByUpdatedAtDesc(Long communityId);
 }
