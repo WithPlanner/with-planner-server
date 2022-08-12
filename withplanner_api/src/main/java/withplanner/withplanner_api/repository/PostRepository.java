@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findTop3ByCommunityIdOrderByCreatedAtDesc(Long communityId);
-    List<Post> findByCommunityId(Long communityId);
+    List<Post> findByCommunityIdOrderByUpdatedAtDesc(Long communityId);
 }

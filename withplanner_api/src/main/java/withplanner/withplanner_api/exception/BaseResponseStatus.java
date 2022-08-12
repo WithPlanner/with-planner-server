@@ -32,6 +32,7 @@ public enum BaseResponseStatus {
     NOT_AUTHENTICATE_DAY(false, 2012, "인증 요일이 아닙니다."),
     NOT_EXISTS_MAP_POST(false, 2013, "존재하는 위치 인증 게시물이 없습니다."),
     NOT_EXISTS_POST(false, 2014, "존재하는 글 인증 게시물이 없습니다."),
+    NOT_EXISTS_COMMENTS(false, 2015, "존재한 댓글이 없습니다. "),
 
     /**
      * 3000 : 홍서

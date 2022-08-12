@@ -68,4 +68,16 @@ public class MapController {
         return new BaseResponse<>(result);
     }
 
+    /**
+     * mapPost 상세조회(+댓글)
+     * @param mapPostIdx
+     */
+    @GetMapping("/community/map-post/detail/{mapPostIdx}")
+    public BaseResponse<CommunityMapPostDetailRes> getDetailMapPost(@PathVariable Long mapPostIdx, @AuthenticationPrincipal User user){
+        Long userId = user.getId();
+
+        CommunityMapPostDetailRes communityMapPostDetailRes = mapService.getDetailMapPost(userId,mapPostIdx);
+        return new BaseResponse<>(communityMapPostDetailRes);
+    }
+
 }
