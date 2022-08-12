@@ -216,6 +216,7 @@ public class CommunityService {
                             .build();
                 }).collect(Collectors.toList());
 
+
         //가장 활성화된 습관 모임
         List<ListCardResp> hotList = communityRepository.findTop6ByOrderByCurrentCountDesc().stream().map(
                 c -> ListCardResp.builder()
@@ -238,12 +239,15 @@ public class CommunityService {
                         .build()
         ).collect(Collectors.toList());
 
+
         deleteDup(myCommunityId, recommendList);
         deleteDup(myCommunityId, hotList);
         deleteDup(myCommunityId, newList);
 
         return new MainListResp(recommendList, myList, hotList, newList);
+
     }
+
 
     public List<ListCardResp> searchCommunity(String query) {
         return communityRepository.findByNameContains(query).stream().map(

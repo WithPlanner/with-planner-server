@@ -6,6 +6,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import withplanner.withplanner_api.domain.User;
 import withplanner.withplanner_api.dto.ResultLongResp;
+import withplanner.withplanner_api.dto.community.CommunityPostDetailRes;
 import withplanner.withplanner_api.dto.post.PostCardResp;
 import withplanner.withplanner_api.dto.post.PostCreateReq;
 import withplanner.withplanner_api.exception.BaseResponse;
@@ -29,5 +30,13 @@ public class PostController {
     public BaseResponse<List<PostCardResp>> getAllPost(@PathVariable Long communityIdx) {
         List<PostCardResp> result = postService.getAllPost(communityIdx);
         return new BaseResponse<>(result);
+    }
+
+    @GetMapping("/community/post/detail/{postIdx}")
+    public BaseResponse<CommunityPostDetailRes> getDetailPost(@PathVariable Long postIdx, @AuthenticationPrincipal User user){
+        Long userId = user.getId();
+
+        CommunityPostDetailRes communityPostDetailRes = postService.getDetailPost(userId,postIdx);
+        return new BaseResponse<>(communityPostDetailRes);
     }
 }

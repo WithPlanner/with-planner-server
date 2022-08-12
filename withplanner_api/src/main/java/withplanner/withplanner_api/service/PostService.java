@@ -1,21 +1,18 @@
 package withplanner.withplanner_api.service;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-import withplanner.withplanner_api.domain.Community;
-import withplanner.withplanner_api.domain.Post;
-import withplanner.withplanner_api.domain.PostImg;
-import withplanner.withplanner_api.domain.User;
+import withplanner.withplanner_api.domain.*;
 import withplanner.withplanner_api.dto.ResultLongResp;
+import withplanner.withplanner_api.dto.community.CommunityCommentDto;
+import withplanner.withplanner_api.dto.community.CommunityPostDetailRes;
 import withplanner.withplanner_api.dto.post.PostCardResp;
 import withplanner.withplanner_api.dto.post.PostCreateReq;
 import withplanner.withplanner_api.exception.BaseException;
-import withplanner.withplanner_api.repository.CommunityRepository;
-import withplanner.withplanner_api.repository.PostImgRepository;
-import withplanner.withplanner_api.repository.PostRepository;
-import withplanner.withplanner_api.repository.UserRepository;
+import withplanner.withplanner_api.exception.BaseResponseStatus;
+import withplanner.withplanner_api.repository.*;
 import withplanner.withplanner_api.util.S3Service;
 
 import java.util.List;
@@ -32,6 +29,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final PostImgRepository postImgRepository;
     private final S3Service s3Service;
+    private final CommentRepository commentRepository;
 
     @Transactional
     public ResultLongResp createPost(PostCreateReq reqDto, Long communityId, String username) {
@@ -76,5 +74,43 @@ public class PostService {
                         .writerNickname(p.getUser().getNickname())
                         .build()
         ).collect(Collectors.toList());
+    }
+
+    public CommunityPostDetailRes getDetailPost(Long userId, Long postIdx){
+        //글 작성자와 로그인 한 유저 여부 비교
+        Boolean authorStatus = false;
+
+        Post post = postRepository.findById(postIdx)
+                .orElseThrow(()->new BaseException(BaseResponseStatus.NOT_EXISTS_POST));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new BaseException(NOT_EXISTS_PARTICIPANT));
+
+        if(post.getUser().equals(user)){
+            authorStatus = true;
+        }
+
+        List<CommunityCommentDto> comments = commentRepository.findCommentByPostId(post.getId())
+                .stream().map(
+                        p -> CommunityCommentDto.builder()
+                                .commentId(p.getId())
+                                .nickname(p.getUser().getNickname())
+                                .comment(p.getContent())
+                                .createdAt(p.getCreatedAt())
+                                .build()
+        ).collect(Collectors.toList());
+
+        CommunityPostDetailRes communityPostDetailRes = CommunityPostDetailRes.builder()
+                .postId(post.getId())
+                .name(post.getName())
+                .content(post.getContent())
+                .images(post.getImages())
+                .writerNickname(post.getUser().getNickname())
+                .updatedAt(post.getCreatedAt())
+                .comments(comments)
+                .authorStatus(authorStatus)
+                .build();
+        return communityPostDetailRes;
+
     }
 }
