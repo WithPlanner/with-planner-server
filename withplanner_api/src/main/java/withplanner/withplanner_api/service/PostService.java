@@ -72,6 +72,7 @@ public class PostService {
                         .content(p.getContent())
                         .images(p.getImages())
                         .writerNickname(p.getUser().getNickname())
+                        .updatedAt(p.getUpdatedAt())
                         .build()
         ).collect(Collectors.toList());
     }

@@ -18,6 +18,7 @@ public class CommunityResp {
     private String name;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private String createdAt;
+    private String updatedAt;
     private String introduce;
     private String communityImg;
     private String category;
@@ -29,7 +30,7 @@ public class CommunityResp {
     private List<PostCardResp> posts;
 
     @Builder
-    public CommunityResp(Long communityId, String name, String createdAt, String introduce, String communityImg, String category, int headCount, int currentCount, List<String> days, String time, List<PostCardResp> posts, String type) {
+    public CommunityResp(Long communityId, String name, String createdAt, String introduce, String communityImg, String category, int headCount, int currentCount, List<String> days, String time, List<PostCardResp> posts, String type, String updatedAt) {
         this.communityId = communityId;
         this.name = name;
         this.createdAt = createdAt;
@@ -42,5 +43,6 @@ public class CommunityResp {
         this.days = days;
         this.posts = posts;
         this.type = type;
+        this.updatedAt = updatedAt;
     }
 }

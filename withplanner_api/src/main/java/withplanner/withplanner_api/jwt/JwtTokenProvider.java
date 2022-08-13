@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import withplanner.withplanner_api.domain.User;
 import withplanner.withplanner_api.exception.BaseException;
+import withplanner.withplanner_api.exception.BaseResponseStatus;
 import withplanner.withplanner_api.service.UserService;
 
 import javax.annotation.PostConstruct;
@@ -91,7 +92,7 @@ public class JwtTokenProvider {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
-            return false;
+            throw new BaseException(BaseResponseStatus.EXPIRED_JWT_TOKEN);
         }
     }
 
