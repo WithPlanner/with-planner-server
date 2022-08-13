@@ -23,6 +23,8 @@ import withplanner.withplanner_api.jwt.JwtTokenProvider;
 import withplanner.withplanner_api.repository.UserRepository;
 import withplanner.withplanner_api.service.UserService;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -76,24 +78,42 @@ public class UserController {
      */
     @PostMapping("/login")
     @Transactional
-    public LoginRes login(@RequestBody LoginReq loginReq){
+    public BaseResponse<LoginRes> login(@RequestBody LoginReq loginReq){
         if(loginReq.getEmail()==null)
             throw new BaseException(BaseResponseStatus.EMPTY_EMAIL);
         if(loginReq.getPassword()==null)
             throw new BaseException(BaseResponseStatus.EMPTY_PASSWORD);
+
         User user = userRepository.findByEmail(loginReq.getEmail())
-                .orElseThrow(()->new IllegalArgumentException("가입되지 않은 이메일 입니다. "));
+                .orElseThrow(()->new BaseException(BaseResponseStatus.NOT_EXISTS_EMAIL));
 
         if (!passwordEncoder.matches(loginReq.getPassword(), user.getPwd())) {
-            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+            throw new BaseException(BaseResponseStatus.NOT_EXISTS_PASSWORD);
         }
 
 //        if(!loginReq.getPassword().equals(user.getPwd())){
 //            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
 //        }
+        LoginRes loginRes = new LoginRes(jwtTokenProvider.createToken(user.getId(),user.getRoles()));
 
-        return new LoginRes(jwtTokenProvider.createToken(user.getId(),user.getRoles()));
+        return new BaseResponse<>(loginRes);
     }
+
+    /**
+     * 자동 로그인 api
+     */
+    @PostMapping("/auto-login")
+    @Transactional
+    public BaseResponse<String> autoLogin(HttpServletRequest request){
+        String message = "";
+
+        String jwtToken = jwtTokenProvider.resolveToken(request);
+        if(jwtTokenProvider.validateToken(jwtToken)){
+            message = "자동로그인에 성공했습니다. ";
+        }
+        return new BaseResponse<>(message);
+    }
+
 
     @GetMapping("/mypage")
     public BaseResponse<MyPageResp> myPageLisitng(@AuthenticationPrincipal User user) {

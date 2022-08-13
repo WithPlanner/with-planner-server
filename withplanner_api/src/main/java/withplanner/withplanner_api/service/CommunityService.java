@@ -124,6 +124,7 @@ public class CommunityService {
                         .content(p.getContent())
                         .images(p.getImages())
                         .writerNickname(p.getUser().getNickname())
+                        .updatedAt(p.getUpdatedAt())
                         .build()
         ).collect(Collectors.toList());
 
@@ -140,6 +141,7 @@ public class CommunityService {
                 .time(community.getTime().toString())
                 .posts(posts)
                 .type(community.getType().toString())
+                .updatedAt(community.getUpdatedAt())
                 .build();
     }
 
