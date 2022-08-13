@@ -133,7 +133,7 @@ public class MapService {
         //요청을 보낸 localDateTime이 당일인지 여부 확인
         LocalDate now = LocalDate.now();
         if(!now.isEqual(reqDto.getLocalDateTime().toLocalDate())){
-            saveStatus = false;
+            throw new BaseException(AFTER_AUTHENTICATE_TIME);
         }
 
         //지정한 시간 이후에 요청을 보내거나 거리계산값이 false이면 saveStatus를 false로 변경
@@ -176,7 +176,7 @@ public class MapService {
 
     public CommunityMapPostDetailRes getDetailMapPost(Long userId, Long mapPostId){
 
-        //사용지
+        //사용자
         User user = userRepository.findById(userId)
                 .orElseThrow(()-> new BaseException(NOT_EXISTS_PARTICIPANT));
 

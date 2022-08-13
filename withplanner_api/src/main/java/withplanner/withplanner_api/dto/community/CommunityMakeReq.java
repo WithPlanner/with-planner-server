@@ -34,7 +34,7 @@ public class CommunityMakeReq {
             case "디지털 디톡스":
                 return Category.digitalDetox;
 
-            case "멘탈관리":
+            case "멘탈 관리":
                 return Category.mentalCare;
 
             case "운동":
