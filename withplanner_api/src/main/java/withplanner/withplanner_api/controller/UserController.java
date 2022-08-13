@@ -84,13 +84,13 @@ public class UserController {
         User user = userRepository.findByEmail(loginReq.getEmail())
                 .orElseThrow(()->new IllegalArgumentException("가입되지 않은 이메일 입니다. "));
 
-        //if (!passwordEncoder.matches(loginReq.getPassword(), user.getPwd())) {
-        //    throw new IllegalArgumentException("잘못된 비밀번호입니다.");
-        //}
-
-        if(!loginReq.getPassword().equals(user.getPwd())){
+        if (!passwordEncoder.matches(loginReq.getPassword(), user.getPwd())) {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
+
+//        if(!loginReq.getPassword().equals(user.getPwd())){
+//            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+//        }
 
         return new LoginRes(jwtTokenProvider.createToken(user.getId(),user.getRoles()));
     }

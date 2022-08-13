@@ -15,7 +15,6 @@ public interface CommunityRepository extends JpaRepository<Community, Long> {
     List<Community> findTop6ByOrderByCurrentCountDesc();
     //최신 습관 모임
     List<Community> findTop6ByOrderByCreatedAtDesc();
-
     //커뮤니티 검색
     List<Community> findByNameContains(String name);
 }
