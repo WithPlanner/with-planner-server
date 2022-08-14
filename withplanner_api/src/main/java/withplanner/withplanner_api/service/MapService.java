@@ -139,7 +139,7 @@ public class MapService {
             throw new BaseException(AFTER_AUTHENTICATE_TIME);
         }
 
-        //지정한 시간 이후에 요청을 보내거나 거리계산값이 false이면 saveStatus를 false로 변경
+        //지정한 시간 이후에 요청을 보내거면
         if(!reqDto.getLocalDateTime().toLocalTime().isBefore(localTime)){
             saveStatus = false;
             throw new BaseException(AFTER_AUTHENTICATE_TIME);
@@ -152,14 +152,23 @@ public class MapService {
         }
 
 
+        MapPost mapPost = new MapPost();
+
         if(saveStatus==true){
-            MapPost mapPost = new MapPost();
             mapPost.connectCommunity(community);
             mapPost.connectUser(user);
             mapPostRepository.save(mapPost);
         }
 
-        CommunityAuthenticateLocationRes communityAuthenticateLocationRes = new CommunityAuthenticateLocationRes(saveStatus);
+        CommunityAuthenticateLocationRes communityAuthenticateLocationRes = CommunityAuthenticateLocationRes.builder()
+                .mapPostId(mapPost.getId())
+                .userId(mapPost.getUser().getId())
+                .updatedAt(mapPost.getUpdatedAt())
+                .location(communityMemberRepository.findCommunityByUserIdAndCommunityId(mapPost.getUser().getId(),mapPost.getCommunity().getId()).get().getMap().getAlias())
+                .nickName(mapPost.getUser().getNickname())
+                .profileImg(mapPost.getUser().getProfileImg())
+                .build();
+
         return communityAuthenticateLocationRes;
     }
 

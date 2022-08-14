@@ -36,7 +36,9 @@ public enum BaseResponseStatus {
     AFTER_AUTHENTICATE_TIME(false, 2016, "인증시간이 지났습니다."),
     NOT_EXISTS_PASSWORD(false, 2017, "잘못된 비밀번호 입니다. "),
     EXPIRED_CREDENTIAL_JWT_TOKEN(false,2018, "jwt credential이 만료되었습니다."),
-    CANNOT_AUTHENTICATE_LOCATION(false, 2018, "위치인증에 실패 하였습니다. "),
+    CANNOT_AUTHENTICATE_LOCATION(false, 2019, "위치인증에 실패 하였습니다. "),
+    NOT_JWT_IN_HEADER(false, 2020, "header에 jwt 토큰이 없습니다. "),
+    ALREADY_AUTHENTICATE_TODAY(false, 2021, "이미 오늘 인증을 완료 하였습니다. "),
 
     /**
      * 3000 : 홍서

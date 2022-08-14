@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import withplanner.withplanner_api.domain.Category;
 import withplanner.withplanner_api.domain.Community;
 
+
 import java.util.List;
 
 public interface CommunityRepository extends JpaRepository<Community, Long> {
@@ -17,4 +18,7 @@ public interface CommunityRepository extends JpaRepository<Community, Long> {
     List<Community> findTop6ByOrderByCreatedAtDesc();
     //커뮤니티 검색
     List<Community> findByNameContains(String name);
+
+
+
 }

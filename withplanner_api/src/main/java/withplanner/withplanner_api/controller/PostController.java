@@ -21,8 +21,8 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping(value = "/community/post/write/{communityIdx}", consumes = {"multipart/form-data"})
-    public BaseResponse<ResultLongResp> createPost(@PathVariable Long communityIdx, @ModelAttribute PostCreateReq reqDto, @AuthenticationPrincipal User user) {
-        ResultLongResp result = postService.createPost(reqDto, communityIdx, user.getUsername());
+    public BaseResponse<PostCardResp> createPost(@PathVariable Long communityIdx, @ModelAttribute PostCreateReq reqDto, @AuthenticationPrincipal User user) {
+        PostCardResp result = postService.createPost(reqDto, communityIdx, user.getUsername());
         return new BaseResponse<>(result);
     }
 
