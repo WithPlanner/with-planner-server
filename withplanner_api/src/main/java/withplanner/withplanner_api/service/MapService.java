@@ -152,14 +152,23 @@ public class MapService {
         }
 
 
+        MapPost mapPost = new MapPost();
+
         if(saveStatus==true){
-            MapPost mapPost = new MapPost();
             mapPost.connectCommunity(community);
             mapPost.connectUser(user);
             mapPostRepository.save(mapPost);
         }
 
-        CommunityAuthenticateLocationRes communityAuthenticateLocationRes = new CommunityAuthenticateLocationRes(saveStatus);
+        CommunityAuthenticateLocationRes communityAuthenticateLocationRes = CommunityAuthenticateLocationRes.builder()
+                .mapPostId(mapPost.getId())
+                .userId(mapPost.getUser().getId())
+                .updatedAt(mapPost.getUpdatedAt())
+                .location(communityMemberRepository.findCommunityByUserIdAndCommunityId(mapPost.getUser().getId(),mapPost.getCommunity().getId()).get().getMap().getAlias())
+                .nickName(mapPost.getUser().getNickname())
+                .profileImg(mapPost.getUser().getProfileImg())
+                .build();
+
         return communityAuthenticateLocationRes;
     }
 
