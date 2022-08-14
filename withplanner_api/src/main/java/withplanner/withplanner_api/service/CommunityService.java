@@ -109,6 +109,7 @@ public class CommunityService {
         communityMemberRepository.save(communityMember);
 
         Long communityId = communityRepository.save(community).getId();
+
         return new ResultLongResp(communityId, "커뮤니티를 생성하였습니다.");
     }
 
@@ -219,6 +220,8 @@ public class CommunityService {
                 }).collect(Collectors.toList());
 
 
+
+
         //가장 활성화된 습관 모임
         List<ListCardResp> hotList = communityRepository.findTop6ByOrderByCurrentCountDesc().stream().map(
                 c -> ListCardResp.builder()
@@ -280,5 +283,6 @@ public class CommunityService {
         compareList.removeIf(c -> myCommunityId.contains(c.getCommunityId()));
         return compareList;
     }
+
 
 }

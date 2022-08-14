@@ -5,12 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import withplanner.withplanner_api.domain.User;
-import withplanner.withplanner_api.dto.ResultLongResp;
 import withplanner.withplanner_api.dto.comment.CommentCreateReq;
 import withplanner.withplanner_api.dto.comment.CommentCreateRes;
-import withplanner.withplanner_api.dto.community.CommunityCreateLocationReq;
-import withplanner.withplanner_api.dto.community.CommunityCreateLocationRes;
-import withplanner.withplanner_api.dto.community.CommunityMakeReq;
 import withplanner.withplanner_api.exception.BaseResponse;
 import withplanner.withplanner_api.service.CommentService;
 

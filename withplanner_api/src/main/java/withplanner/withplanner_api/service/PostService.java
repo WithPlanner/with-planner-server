@@ -32,7 +32,7 @@ public class PostService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    public ResultLongResp createPost(PostCreateReq reqDto, Long communityId, String username) {
+    public PostCardResp createPost(PostCreateReq reqDto, Long communityId, String username) {
         Community community = communityRepository.findById(communityId)
                 .orElseThrow(() -> new BaseException(NOT_EXISTS_COMMUNITY));
 
@@ -61,7 +61,16 @@ public class PostService {
 
         Post savedPost = postRepository.save(post);
 
-        return new ResultLongResp(savedPost.getId(), "글 작성에 성공하였습니다.");
+        PostCardResp postCardResp = PostCardResp.builder()
+                .postId(savedPost.getId())
+                .name(savedPost.getName())
+                .content(savedPost.getContent())
+                .images(savedPost.getImages())
+                .writerNickname(savedPost.getUser().getNickname())
+                .updatedAt(savedPost.getUpdatedAt())
+                .build();
+
+        return postCardResp;
     }
 
     public List<PostCardResp> getAllPost(Long communityId){
