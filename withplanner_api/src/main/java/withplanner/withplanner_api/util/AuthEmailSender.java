@@ -26,12 +26,12 @@ public class AuthEmailSender {
     }
 
     @Async
-    public void sendMail2(String mailTo, String password) {
+    public void sendMail2(String mailTo, String password, String name) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(mailTo);
         message.setFrom(FROM);
         message.setSubject(TITLE2);
-        message.setText(makeText2(password));
+        message.setText(makeText2(password,name));
         mailSender.send(message);
     }
 
@@ -44,9 +44,9 @@ public class AuthEmailSender {
                 "감사합니다.";
     }
 
-    public String makeText2(String password){
+    public String makeText2(String password, String name){
         return "안녕하세요 위드플래너입니다.\n" +
-                "생성한 비공개 습관모임의 " +
+                "생성한 비공개 습관모임 " + name +" 의 " +
                 "비밀번호는 " + password +" 입니다.\n" +
                 "모임원들과 공유하여 이용 하시길 바랍니다.\n\n" +
                 "감사합니다.";
