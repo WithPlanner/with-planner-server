@@ -89,14 +89,14 @@ public class CommunityService {
 
         //private 이라면 커뮤니티 비밀번호 방장에게 발송
         if(community.getPublicType().equals(PublicType.privateType)){
-            sendPasswordEmail(user.getEmail(),community.getPassword());
+            sendPasswordEmail(user.getEmail(),community.getPassword(),community.getName());
         }
 
         return new CommunityCreateRes(communityId, "커뮤니티를 생성하였습니다.",community.getPublicType().toString());
     }
     //커뮤니티 비밀번호
-    private void sendPasswordEmail(String email,String password) {
-        authMailSender.sendMail2(email, password);
+    private void sendPasswordEmail(String email,String password,String name) {
+        authMailSender.sendMail2(email, password, name);
     }
 
     @Transactional
@@ -186,7 +186,7 @@ public class CommunityService {
 
         //private 이라면 커뮤니티 비밀번호 방장에게 발송
         if(community.getPublicType().equals(PublicType.privateType)){
-            sendPasswordEmail(user.getEmail(),community.getPassword());
+            sendPasswordEmail(user.getEmail(),community.getPassword(),community.getName());
         }
 
         return new CommunityCreateRes(communityId, "커뮤니티를 생성하였습니다.", community.getPublicType().toString());
@@ -408,5 +408,4 @@ public class CommunityService {
 
         return generatedString;
     }
-
 }
