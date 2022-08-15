@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 import withplanner.withplanner_api.domain.Community;
 import withplanner.withplanner_api.domain.Map;
+import withplanner.withplanner_api.dto.post.PostCardResp;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -26,6 +27,8 @@ public class CommunityGetInfoRes {
     private String type; //mapPost, post 타입
     private LocalTime time; //인증하기로 한 시간
     private List<String> days; //인증하기로 한 요일
+    private String publicType; //public인지 private인지
+    private String password; //private인 경우
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private String createdAt; //습관모임 생성 날짜(요일만 보내줌)
@@ -42,6 +45,23 @@ public class CommunityGetInfoRes {
                 .time(community.getTime())
                 .days(community.getDays())
                 .createdAt(community.getCreatedAt())
+                .publicType(community.getPublicType().toString())
+                .password(community.getPassword())
                 .build();
+    }
+
+    @Builder
+    public CommunityGetInfoRes(String name, String createdAt, String introduce, String communityImg, int headCount, int currentCount, List<String> days, LocalTime time,  String type, String publicType, String password) {
+        this.communityImg = communityImg;
+        this.name = name;
+        this.createdAt = createdAt;
+        this.introduce = introduce;
+        this.headCount = headCount;
+        this.currentCount = currentCount;
+        this.time = time;
+        this.type = type;
+        this.days = days;
+        this.publicType = publicType;
+        this.password = password;
     }
 }

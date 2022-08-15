@@ -10,5 +10,5 @@ import java.util.List;
 public interface MapPostRepository extends JpaRepository<MapPost, Long> {
     List<MapPost> findTop6ByCommunityIdOrderByCreatedAtDesc(Long communityId);
     List<MapPost> findByCommunityIdOrderByUpdatedAtDesc(Long communityId);
-    boolean existsByCommunityIdAndUserIdAndCreatedAt(Long communityId, Long userId, LocalDateTime createdAt);
-}
+    List<MapPost> findByCommunityIdAndUserId(Long communityId, Long userId);
+ }

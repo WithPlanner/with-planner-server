@@ -15,6 +15,8 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.chrono.ChronoLocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.List;
 import java.util.Locale;
@@ -130,6 +132,16 @@ public class MapService {
         if(!days.contains(today)){
             saveStatus = false;
             throw new BaseException(NOT_AUTHENTICATE_DAY);
+        }
+
+        //오늘 이미 인증을 완료했는지 여부 검증
+        List<MapPost> mapPosts = mapPostRepository.findByCommunityIdAndUserId(community.getId(),user.getId());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        Boolean alreadyAuthenticate = mapPosts.stream().anyMatch(
+                mapPost -> LocalDateTime.parse(mapPost.getCreatedAt(),formatter).toLocalDate().isEqual(localDate)
+        );
+        if(alreadyAuthenticate == true){
+            throw new BaseException(ALREADY_AUTHENTICATE_TODAY);
         }
 
         //요청을 보낸 localDateTime이 당일인지 여부 확인

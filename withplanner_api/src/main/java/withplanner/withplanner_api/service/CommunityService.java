@@ -4,23 +4,24 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import withplanner.withplanner_api.domain.*;
-import withplanner.withplanner_api.dto.ResultLongResp;
 import withplanner.withplanner_api.dto.community.*;
 import withplanner.withplanner_api.dto.post.ListCardResp;
 import withplanner.withplanner_api.dto.post.MainListResp;
 import withplanner.withplanner_api.dto.post.PostCardResp;
+import withplanner.withplanner_api.dto.post.SearchCardResp;
 import withplanner.withplanner_api.exception.BaseException;
 import withplanner.withplanner_api.exception.BaseResponseStatus;
 import withplanner.withplanner_api.repository.CommunityMemberRepository;
 import withplanner.withplanner_api.repository.CommunityRepository;
 import withplanner.withplanner_api.repository.PostRepository;
 import withplanner.withplanner_api.repository.UserRepository;
+import withplanner.withplanner_api.util.AuthEmailSender;
 import withplanner.withplanner_api.util.RecommendCategory;
 import withplanner.withplanner_api.util.S3Service;
 import withplanner.withplanner_api.repository.*;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 import static withplanner.withplanner_api.exception.BaseResponseStatus.NOT_EXISTS_COMMUNITY;
 
@@ -34,9 +35,10 @@ public class CommunityService {
     private final CommunityMemberRepository communityMemberRepository;
     private final S3Service s3Service;
     private final MapPostRepository mapPostRepository;
+    private final AuthEmailSender authMailSender;
 
     @Transactional
-    public ResultLongResp createMapCommunity(CommunityMakeReq reqDto, String username) {
+    public CommunityCreateRes createMapCommunity(CommunityMakeReq reqDto, String username) {
         Community community;
         String imgUrl = "https://withplanner-s3.s3.ap-northeast-2.amazonaws.com/default_communityImg_transparency.png";
         User user = userRepository.findByEmail(username)
@@ -48,29 +50,57 @@ public class CommunityService {
             imgUrl = "https://withplanner-s3.s3.ap-northeast-2.amazonaws.com/" + name;
         }
 
-        community = Community.builder()
-                .name(reqDto.getName())
-                .introduce(reqDto.getIntroduce())
-                .communityImg(imgUrl)
-                .headCount(reqDto.getHeadCount())
-                .category(reqDto.getCategory())
-                .days(reqDto.getDay())
-                .time(reqDto.getTime())
-                .type(Type.mapPost)
-                .build();
+        //공개 커뮤니티
+        if(reqDto.getPublicType() .equals(PublicType.publicType.toString())){
+            community = Community.builder()
+                    .name(reqDto.getName())
+                    .introduce(reqDto.getIntroduce())
+                    .communityImg(imgUrl)
+                    .headCount(reqDto.getHeadCount())
+                    .category(reqDto.getCategory())
+                    .days(reqDto.getDay())
+                    .time(reqDto.getTime())
+                    .type(Type.mapPost)
+                    .publicType(PublicType.publicType)
+                    .build();
+        }
+        else{
+            String password = createPassword();
 
+            community = Community.builder()
+                    .name(reqDto.getName())
+                    .introduce(reqDto.getIntroduce())
+                    .communityImg(imgUrl)
+                    .headCount(reqDto.getHeadCount())
+                    .category(reqDto.getCategory())
+                    .days(reqDto.getDay())
+                    .time(reqDto.getTime())
+                    .type(Type.mapPost)
+                    .publicType(PublicType.privateType)
+                    .password(password)
+                    .build();
+        }
         user.addCommunity(community);
 
         CommunityMember communityMember = new CommunityMember();
         communityMember.connectCommunityMember(true, Status.ACTIVE, community, user);
         communityMemberRepository.save(communityMember);
-
         Long communityId = communityRepository.save(community).getId();
-        return new ResultLongResp(communityId, "커뮤니티를 생성하였습니다.");
+
+        //private 이라면 커뮤니티 비밀번호 방장에게 발송
+        if(community.getPublicType().equals(PublicType.privateType)){
+            sendPasswordEmail(user.getEmail(),community.getPassword());
+        }
+
+        return new CommunityCreateRes(communityId, "커뮤니티를 생성하였습니다.",community.getPublicType().toString());
+    }
+    //커뮤니티 비밀번호
+    private void sendPasswordEmail(String email,String password) {
+        authMailSender.sendMail2(email, password);
     }
 
     @Transactional
-    public ResultLongResp createPostCommunity(CommunityMakeReq reqDto, String username) {
+    public CommunityCreateRes createPostCommunity(CommunityMakeReq reqDto, String username) {
         Community community;
         System.out.println("reqDto = " + reqDto);
         User user = userRepository.findByEmail(username)
@@ -80,26 +110,70 @@ public class CommunityService {
             String name = s3Service.uploadToAWS(reqDto.getCommunityImg());
             //s3에 저장된 imgUrl 이를 저장하면 된다.
             String imgUrl = "https://withplanner-s3.s3.ap-northeast-2.amazonaws.com/" + name;
-            community = Community.builder()
-                    .name(reqDto.getName())
-                    .introduce(reqDto.getIntroduce())
-                    .communityImg(imgUrl)
-                    .headCount(reqDto.getHeadCount())
-                    .category(reqDto.getCategory())
-                    .days(reqDto.getDay())
-                    .time(reqDto.getTime())
-                    .type(Type.post)
-                    .build();
+
+            //사진을 저장O & public type
+            if(reqDto.getPublicType().equals(PublicType.publicType.toString())) {
+                community = Community.builder()
+                        .name(reqDto.getName())
+                        .introduce(reqDto.getIntroduce())
+                        .communityImg(imgUrl)
+                        .headCount(reqDto.getHeadCount())
+                        .category(reqDto.getCategory())
+                        .days(reqDto.getDay())
+                        .time(reqDto.getTime())
+                        .type(Type.post)
+                        .publicType(PublicType.publicType)
+                        .build();
+            }
+            //사진을 저장O & private type
+            else {
+                String password = createPassword();
+
+                community = Community.builder()
+                        .name(reqDto.getName())
+                        .introduce(reqDto.getIntroduce())
+                        .communityImg(imgUrl)
+                        .headCount(reqDto.getHeadCount())
+                        .category(reqDto.getCategory())
+                        .days(reqDto.getDay())
+                        .time(reqDto.getTime())
+                        .type(Type.post)
+                        .publicType(PublicType.privateType)
+                        .password(password)
+                        .build();
+            }
+
         } else {
-            community = Community.builder()
-                    .name(reqDto.getName())
-                    .introduce(reqDto.getIntroduce())
-                    .headCount(reqDto.getHeadCount())
-                    .category(reqDto.getCategory())
-                    .days(reqDto.getDay())
-                    .time(reqDto.getTime())
-                    .type(Type.post)
-                    .build();
+            //사진을 저장X & public type
+            if(reqDto.getPublicType().equals(PublicType.publicType.toString())) {
+                community = Community.builder()
+                        .name(reqDto.getName())
+                        .introduce(reqDto.getIntroduce())
+                        .headCount(reqDto.getHeadCount())
+                        .category(reqDto.getCategory())
+                        .days(reqDto.getDay())
+                        .time(reqDto.getTime())
+                        .type(Type.post)
+                        .publicType(PublicType.publicType)
+                        .build();
+            }
+            //사진을 저장X & private type
+            else  {
+
+                String password = createPassword();
+
+                community = Community.builder()
+                        .name(reqDto.getName())
+                        .introduce(reqDto.getIntroduce())
+                        .headCount(reqDto.getHeadCount())
+                        .category(reqDto.getCategory())
+                        .days(reqDto.getDay())
+                        .time(reqDto.getTime())
+                        .type(Type.post)
+                        .publicType(PublicType.privateType)
+                        .password(password)
+                        .build();
+            }
         }
 
         user.addCommunity(community);
@@ -110,7 +184,12 @@ public class CommunityService {
 
         Long communityId = communityRepository.save(community).getId();
 
-        return new ResultLongResp(communityId, "커뮤니티를 생성하였습니다.");
+        //private 이라면 커뮤니티 비밀번호 방장에게 발송
+        if(community.getPublicType().equals(PublicType.privateType)){
+            sendPasswordEmail(user.getEmail(),community.getPassword());
+        }
+
+        return new CommunityCreateRes(communityId, "커뮤니티를 생성하였습니다.", community.getPublicType().toString());
     }
 
     public CommunityResp getPostCommunityMain(Long communityId) {
@@ -220,8 +299,6 @@ public class CommunityService {
                 }).collect(Collectors.toList());
 
 
-
-
         //가장 활성화된 습관 모임
         List<ListCardResp> hotList = communityRepository.findTop6ByOrderByCurrentCountDesc().stream().map(
                 c -> ListCardResp.builder()
@@ -254,18 +331,43 @@ public class CommunityService {
     }
 
 
-    public List<ListCardResp> searchCommunity(String query) {
-        return communityRepository.findByNameContains(query).stream().map(
-                c -> ListCardResp.builder()
+    public List<SearchCardResp> searchCommunity(User user, String query) {
+
+        List<Long> myCommunityId = new ArrayList<>();
+
+
+        //회원님이 참여하는 습관 모임
+        List<Community> myCommunities = communityMemberRepository.findByUserId(user.getId()).stream().map(
+                CommunityMember::getCommunity
+        ).collect(Collectors.toList());
+
+
+        List<ListCardResp> myList = myCommunities.stream().map(
+                c -> {
+                    myCommunityId.add(c.getId());
+                    return ListCardResp.builder()
+                            .communityId(c.getId())
+                            .name(c.getName())
+                            .communityImg(c.getCommunityImg())
+                            .type(c.getType().toString())
+                            .category(c.getCategory().toString())
+                            .build();
+                }).collect(Collectors.toList());
+
+
+        List<SearchCardResp> searchList =  communityRepository.findByNameContains(query).stream().map(
+                c -> SearchCardResp.builder()
                         .communityId(c.getId())
                         .name(c.getName())
                         .communityImg(c.getCommunityImg())
                         .type(c.getType().toString())
                         .category(c.getCategory().toString())
+                        .publicType(c.getPublicType().toString())
                         .build()
         ).collect(Collectors.toList());
-    }
 
+        return searchDeleteDup(myCommunityId,searchList);
+    }
 
     @Transactional
     public CommunityGetInfoRes getCommunityInfo(Long communityId){
@@ -284,5 +386,27 @@ public class CommunityService {
         return compareList;
     }
 
+    //(검색 버전)
+    //만약 비교리스트에 내가 참여한 커뮤니티가 포함되어있으면 삭제
+    private List<SearchCardResp> searchDeleteDup(List<Long> myCommunityId, List<SearchCardResp> compareList) {
+        compareList.removeIf(c -> myCommunityId.contains(c.getCommunityId()));
+        return compareList;
+    }
+
+    //난수 생성
+    private String createPassword(){
+        int leftLimit = 48; // numeral '0'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 10;
+        Random random = new Random();
+
+        String generatedString = random.ints(leftLimit,rightLimit + 1)
+                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+                .limit(targetStringLength)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+
+        return generatedString;
+    }
 
 }

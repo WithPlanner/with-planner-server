@@ -20,6 +20,7 @@ public class CommunityMakeReq {
     private String category;
     private int headCount;
     private List<String> day;
+    private String publicType;
 
     @DateTimeFormat(pattern = "kk:mm:ss")
     private LocalTime time;

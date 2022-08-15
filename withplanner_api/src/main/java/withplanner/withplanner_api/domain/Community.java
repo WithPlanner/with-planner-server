@@ -51,6 +51,11 @@ public class Community extends BaseTimeEntity{
     @OneToMany(mappedBy = "community")
     private List<CommunityMember> communityMembers= new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    private PublicType publicType; //공개 비공개 여부
+
+    private String password; //비공개 시 비밀번호
+
 
     //커뮤니티 가입 시 currentCount +1
     public void plusCurrentCount() {
@@ -58,7 +63,7 @@ public class Community extends BaseTimeEntity{
     }
 
     @Builder
-    public Community(String name, String introduce, String communityImg, Integer headCount, Category category, List<String> days, LocalTime time, Type type) {
+    public Community(String name, String introduce, String communityImg, Integer headCount, Category category, List<String> days, LocalTime time, Type type, PublicType publicType, String password) {
         this.name = name;
         this.introduce = introduce;
         this.communityImg = communityImg;
@@ -69,6 +74,8 @@ public class Community extends BaseTimeEntity{
         this.type = type;
         this.status = Status.ACTIVE;
         this.currentCount = 1;
+        this.publicType = publicType;
+        this.password = password;
     }
 
     public void addUser(User user) {
