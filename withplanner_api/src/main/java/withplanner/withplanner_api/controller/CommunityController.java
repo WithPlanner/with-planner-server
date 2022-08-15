@@ -5,12 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import withplanner.withplanner_api.domain.User;
-import withplanner.withplanner_api.dto.community.CommunityGetInfoRes;
-import withplanner.withplanner_api.dto.community.CommunityMakeReq;
-import withplanner.withplanner_api.dto.community.CommunityMapRes;
+import withplanner.withplanner_api.dto.community.*;
+import withplanner.withplanner_api.dto.post.SearchCardResp;
 import withplanner.withplanner_api.exception.BaseResponse;
 import withplanner.withplanner_api.dto.ResultLongResp;
-import withplanner.withplanner_api.dto.community.CommunityResp;
 import withplanner.withplanner_api.dto.post.ListCardResp;
 import withplanner.withplanner_api.dto.post.MainListResp;
 import withplanner.withplanner_api.service.CommunityService;
@@ -39,14 +37,14 @@ public class CommunityController {
     }
 
     @PostMapping(value = "/make/loc", consumes = {"multipart/form-data"})
-    public BaseResponse<ResultLongResp> createMapCommunity(@ModelAttribute CommunityMakeReq reqDto, @AuthenticationPrincipal User user) {
-        ResultLongResp result = communityService.createMapCommunity(reqDto, user.getUsername());
+    public BaseResponse<CommunityCreateRes> createMapCommunity(@ModelAttribute CommunityMakeReq reqDto, @AuthenticationPrincipal User user) {
+        CommunityCreateRes result = communityService.createMapCommunity(reqDto, user.getUsername());
         return new BaseResponse<>(result);
     }
 
     @PostMapping(value = "/make/post", consumes = {"multipart/form-data"})
-    public BaseResponse<ResultLongResp> createPostCommunity(@ModelAttribute CommunityMakeReq reqDto, @AuthenticationPrincipal User user) {
-        ResultLongResp result = communityService.createPostCommunity(reqDto, user.getUsername());
+    public BaseResponse<CommunityCreateRes> createPostCommunity(@ModelAttribute CommunityMakeReq reqDto, @AuthenticationPrincipal User user) {
+        CommunityCreateRes result = communityService.createPostCommunity(reqDto, user.getUsername());
         return new BaseResponse<>(result);
     }
 
@@ -69,8 +67,8 @@ public class CommunityController {
     }
 
     @GetMapping("/main/search")
-    public BaseResponse<List<ListCardResp>> searchListing(@RequestParam String query) {
-        List<ListCardResp> result = communityService.searchCommunity(query);
+    public BaseResponse<List<SearchCardResp>> searchListing(@AuthenticationPrincipal User user, @RequestParam String query) {
+        List<SearchCardResp> result = communityService.searchCommunity(user, query);
         return new BaseResponse<>(result);
     }
 }
