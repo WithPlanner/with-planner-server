@@ -44,7 +44,7 @@ public class CommunityMakeReq {
             case "홈 트레이닝" :
                 return Category.homeTraining;
 
-            case "스트래칭" :
+            case "스트레칭" :
                 return Category.stretching;
 
             case "시간 관리" :
