@@ -34,7 +34,19 @@ public class CommunityMember extends BaseTimeEntity {
     @JoinColumn(name= "map_idx")
     private Map map;
 
+    public void connectCommunityMember(Boolean authority, Status status, Community community, User user){
+        this.authority = authority;
+        this.status  = status;
+        this.community = community;
+        this.user = user;
+        community.addCommunityMember(this);
+    }
 
+    //연관관계 메서드
+    public void connectMap(Map map){
+        this.map = map;
+        map.setCommunityMember(this);
+    }
 
 
 }

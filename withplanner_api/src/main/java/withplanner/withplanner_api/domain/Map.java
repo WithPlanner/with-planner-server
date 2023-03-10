@@ -1,26 +1,52 @@
 package withplanner.withplanner_api.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+
 public class Map extends BaseTimeEntity {
     @Id
     @GeneratedValue
     @Column(name="map_idx")
     private Long id;
 
-    private String x ; //경도
-    private String y ; //위도
+    private double x ; //경도
+    private double y ; //위도
 
-    private Address address; //주소
+//    private Address address; //주소
+    private Location location;
 
-    private String alias;
+    private String alias; //별칭
+
+    private String name; //상호명 (ex. 성신여자대학교 수정관)
 
     @OneToOne(mappedBy = "map", fetch = FetchType.LAZY)
     private CommunityMember communityMember;
+
+    public void addAlias(String alias){
+        this.alias = alias;
+    }
+
+    @Builder
+    public Map(double x, double y, Location location, String alias,String name){
+        this.x=x;
+        this.y=y;
+        this.location = location;
+        this.alias = alias;
+        this.name = name;
+    }
+
+
+    //Map에 CommunityMember연결
+    public void setCommunityMember(CommunityMember communityMember){
+        this.communityMember = communityMember;
+    }
+
+
 }

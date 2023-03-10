@@ -26,8 +26,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 	//**database**
-//	runtimeOnly 'mysql:mysql-connector-java'
-	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'mysql:mysql-connector-java'
+//	runtimeOnly 'com.h2database:h2'
 
 	//**lombok**
 	annotationProcessor 'org.projectlombok:lombok'
@@ -43,6 +43,16 @@ dependencies {
 
 	//**jwt**
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+	// https://mvnrepository.com/artifact/org.json/json -> json 활용
+	implementation group: 'org.json', name: 'json', version: '20160810'
+
+	//gson
+	// https://mvnrepository.com/artifact/com.google.code.gson/gson
+	implementation 'com.google.code.gson:gson:2.9.0'
+
+	// aws s3
+	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.239'
 }
 
 tasks.named('test') {

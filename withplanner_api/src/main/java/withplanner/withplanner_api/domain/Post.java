@@ -1,6 +1,9 @@
 package withplanner.withplanner_api.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -10,6 +13,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Post extends BaseTimeEntity{
     @Id
     @GeneratedValue
@@ -36,4 +40,24 @@ public class Post extends BaseTimeEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "community_idx")
     private Community community;
+
+    @Builder
+    public Post(String name, String content) {
+        this.name = name;
+        this.content = content;
+        this.status = Status.ACTIVE;
+    }
+
+    public void addUser(User user) {
+        this.user = user;
+    }
+
+    public void addCommunity(Community community) {
+        this.community = community;
+    }
+
+    public void addPostImg(PostImg postImg) {
+        images.add(postImg);
+        postImg.addPost(this);
+    }
 }

@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import withplanner.withplanner_api.domain.User;
 import withplanner.withplanner_api.exception.BaseException;
+import withplanner.withplanner_api.exception.BaseResponseStatus;
 import withplanner.withplanner_api.service.UserService;
 
 import javax.annotation.PostConstruct;
@@ -63,8 +64,9 @@ public class JwtTokenProvider {
 
     //jwt토큰에서 얻은 userId로 인증정보 조회
     public Authentication getAuthentication(String token){
-        User user =userService.findUserById(this.getUserPk(token)); //?
-        return new UsernamePasswordAuthenticationToken(user,"",user.getAuthorities());
+        User user = userService.findUserById(this.getUserPk(token)); //?
+        UserDetails userDetails = userService.loadUserByUsername(user.getEmail());
+        return new UsernamePasswordAuthenticationToken(user,"",userDetails.getAuthorities());
     }
 
     //토큰에서 userId 추출.
@@ -90,7 +92,7 @@ public class JwtTokenProvider {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
-            return false;
+            throw new BaseException(BaseResponseStatus.EXPIRED_JWT_TOKEN);
         }
     }
 

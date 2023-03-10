@@ -14,9 +14,10 @@ import java.util.stream.Collectors;
 
 @Entity
 @Getter
-@Setter
+@Builder
 @Table(name ="users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class User extends BaseTimeEntity implements UserDetails {
 
     @Id
@@ -41,6 +42,8 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     @Embedded
     private Address address;
+
+    private String recommend;
 
     @OneToMany(mappedBy = "user")
     private List<Comment> comments = new ArrayList<>();
@@ -72,8 +75,7 @@ public class User extends BaseTimeEntity implements UserDetails {
     }
 
     //UserDetails 구현체 관련 코드 - 필수
-
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER) // 수정필요!
     @CollectionTable(joinColumns = @JoinColumn(name = "user_idx"))
     @Column(name="role")
     private List<String> roles = new ArrayList<>();
@@ -90,7 +92,7 @@ public class User extends BaseTimeEntity implements UserDetails {
     }
     @Override
     public String getUsername() {
-        return null;
+        return email;
     }
     @Override
     public boolean isAccountNonExpired() {
@@ -107,6 +109,24 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return false;
+    }
+
+    public void addCommunity(Community community) {
+        communities.add(community);
+        community.addUser(this);
+    }
+
+    public void addPost(Post post) {
+        posts.add(post);
+        post.addUser(this);
+    }
+
+    public void addInvestigation(Investigation investigation) {
+        this.investigation = investigation;
+        investigation.addUser(this);
+    }
+    public void addRecommend(String category) {
+        this.recommend = category;
     }
 
 

@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
+import withplanner.withplanner_api.exception.BaseException;
+import withplanner.withplanner_api.exception.BaseResponseStatus;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -27,8 +29,13 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             String token = jwtTokenProvider.resolveToken((HttpServletRequest) request);
             Long id = null;
 
+            //token값이 null인지 확인합니다.
+            if(token ==null){
+                throw new BaseException(BaseResponseStatus.NOT_JWT_IN_HEADER);
+            }
+
             // 유효한 토큰인지 확인합니다.
-            if (token != null && jwtTokenProvider.validateToken(token)) {
+            if ( jwtTokenProvider.validateToken(token)) {
                 // 토큰이 유효하면 토큰으로부터 유저 정보를 받아옵니다.
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
                 // 토큰으로부터 사용자의 id값을 받아옵니다.
