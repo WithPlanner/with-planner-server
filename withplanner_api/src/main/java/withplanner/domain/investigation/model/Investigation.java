@@ -1,4 +1,5 @@
 package withplanner.domain.investigation.model;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -34,11 +35,17 @@ public class Investigation extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Status status; //Enum - ACTIVE,  INACTIVE
 
-    @OneToOne(mappedBy = "investigation", fetch = FetchType.LAZY)
-    private User user;
+    private Long userId;
 
     @Builder
-    public Investigation(Integer q1, Integer q2, Integer q3, Integer q4, Integer q5, Integer q6, Integer q7, Integer q8) {
+    public Investigation(Integer q1,
+                         Integer q2,
+                         Integer q3,
+                         Integer q4,
+                         Integer q5,
+                         Integer q6,
+                         Integer q7,
+                         Integer q8) {
         this.q1 = q1;
         this.q2 = q2;
         this.q3 = q3;
@@ -50,8 +57,7 @@ public class Investigation extends BaseTimeEntity {
         this.status = Status.ACTIVE;
     }
 
-
-    public void addUser(User user) {
-        this.user = user;
-    }
+//    public void addUser(Long userId) {
+//        this.userId = userId;
+//    }
 }
