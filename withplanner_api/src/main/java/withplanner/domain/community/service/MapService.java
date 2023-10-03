@@ -1,6 +1,9 @@
 package withplanner.domain.community.service;
 
 import lombok.RequiredArgsConstructor;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import withplanner.domain.community.repository.CommunityMemberRepository;
@@ -8,7 +11,6 @@ import withplanner.domain.community.repository.CommunityRepository;
 import withplanner.domain.community.repository.MapRepository;
 import withplanner.domain.community.model.Community;
 import withplanner.domain.community.model.CommunityMember;
-import withplanner.domain.community.model.Coordinate;
 import withplanner.domain.community.model.Map;
 import withplanner.domain.post.model.Post;
 import withplanner.domain.post.repository.CommentRepository;
@@ -43,7 +45,6 @@ public class MapService {
     private final CommunityMemberRepository communityMemberRepository;
     private final CommentRepository commentRepository;
 
-
     @Transactional
     public CommunityCreateLocationRes createLocation(CommunityCreateLocationReq req, Long userId, Long communityId){
         //user
@@ -54,7 +55,9 @@ public class MapService {
         Community community = communityRepository.findById(communityId)
                 .orElseThrow(()-> new BaseException(NOT_EXISTS_COMMUNITY));
 
-        Coordinate coordinate = new Coordinate(req.getLatitude(), req.getLongitude());
+        GeometryFactory geometryFactory = new GeometryFactory();
+        Point coordinate = geometryFactory.createPoint(new Coordinate(req.getLongitude(), req.getLatitude()));
+
         Map map = Map.builder()
                 .coordinate(coordinate)
                 .alias(req.getAlias())
@@ -93,8 +96,8 @@ public class MapService {
                 .orElseThrow(()-> new BaseException(NOT_EXISTS_COMMUNITY_MEMBER));
 
         String nickname = user.getNickname(); //유저 닉네임
-        double x = communityMember.getMap().getCoordinate().getLongitude(); //경도
-        double y = communityMember.getMap().getCoordinate().getLatitude(); //위도
+        double x = communityMember.getMap().getCoordinate().getX(); //경도
+        double y = communityMember.getMap().getCoordinate().getY(); //위도
         String alias = communityMember.getMap().getAlias(); //목적지 별칭
         String roadAddress = "";//communityMember.getMap().getLocation().getRoadAddress(); //도로명 주소
         String address = "";//communityMember.getMap().getLocation().getAddress(); //지번 주소
