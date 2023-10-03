@@ -52,9 +52,13 @@ public class User extends BaseTimeEntity implements UserDetails {
 //    @OneToMany(mappedBy = "user")
 //    private List<Community> communities= new ArrayList<>();
 
-    @OneToOne(fetch=FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name= "investigation_id") //일대일관계의 경우 fk가 어디있어도 상관없지만 활용 빈도가 높은곳에 많이 넣음.
-    private Investigation investigation;
+    private Long investigationId;
+
+    //UserDetails 구현체 관련 코드 - 필수
+    @ElementCollection(fetch = FetchType.EAGER) // 수정필요!
+    @CollectionTable(joinColumns = @JoinColumn(name = "user_idx"))
+    @Column(name="role")
+    private List<String> roles = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "user")
 //    private List<CommunityMember> communityMembers= new ArrayList<>();
@@ -67,12 +71,6 @@ public class User extends BaseTimeEntity implements UserDetails {
         this.emailAuth = true;
         this.roles.add(role);
     }
-
-    //UserDetails 구현체 관련 코드 - 필수
-    @ElementCollection(fetch = FetchType.EAGER) // 수정필요!
-    @CollectionTable(joinColumns = @JoinColumn(name = "user_idx"))
-    @Column(name="role")
-    private List<String> roles = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -115,9 +113,8 @@ public class User extends BaseTimeEntity implements UserDetails {
 //        post.addUser(this); //양방향으로 매핑하면 주석 풀면 됩니다. 안할거면 삭제해도 무방
     }
 
-    public void addInvestigation(Investigation investigation) {
-        this.investigation = investigation;
-        investigation.addUser(this);
+    public void addInvestigation(Long investigationId) {
+        this.investigationId = investigationId;
     }
     public void addRecommend(String category) {
         this.recommend = category;

@@ -51,12 +51,7 @@ public class Community extends BaseTimeEntity {
 
 //    //todo : 논의할 부분 : 양방향임
 //    @OneToMany(mappedBy = "community")
-//    private List<Post> posts = new ArrayList<>();
-
-
-    //todo : 논의할 부분 : 양방향임
-    @OneToMany(mappedBy = "community")
-    private List<CommunityMember> communityMembers= new ArrayList<>();
+//    private List<CommunityMember> communityMembers= new ArrayList<>();
 
     private LocalDateTime finishDate; //커뮤니티 인증 종료 날짜
 
@@ -82,7 +77,6 @@ public class Community extends BaseTimeEntity {
                      LocalTime time,
                      CommunityProgressStatus communityProgressStatus,
                      Boolean isLocationAuthenticationRequired,
-                     List<Post> posts,
                      List<CommunityMember> communityMembers,
                      LocalDateTime finishDate,
                      Boolean isPublic,
@@ -100,7 +94,7 @@ public class Community extends BaseTimeEntity {
         this.communityProgressStatus = communityProgressStatus;
         this.isLocationAuthenticationRequired = isLocationAuthenticationRequired;
 //        this.posts = posts;
-        this.communityMembers = communityMembers;
+//        this.communityMembers = communityMembers;
         this.finishDate = finishDate;
         this.isPublic = isPublic;
         this.password = password;
@@ -111,7 +105,8 @@ public class Community extends BaseTimeEntity {
         //post.addCommunity(this);
     }
 
-    public void addCommunityMember(CommunityMember communityMember) {
-        communityMembers.add(communityMember);
-    }
+//    public void addCommunityMember(CommunityMember communityMember) {
+//        communityMembers.add(communityMember);
+//    }
+
 }

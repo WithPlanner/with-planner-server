@@ -29,6 +29,4 @@ public class CommentController {
         return new BaseResponse<>(commentCreateRes);
     }
 
-
-
 }
