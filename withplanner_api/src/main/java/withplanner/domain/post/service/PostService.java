@@ -58,9 +58,6 @@ public class PostService {
             post.addPostImg(postImage);
         }
 
-        user.addPost(post);
-        community.addPost(post);
-
         Post savedPost = postRepository.save(post);
 
         PostCardResp postCardResp = PostCardResp.builder()

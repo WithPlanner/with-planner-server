@@ -27,6 +27,8 @@ dependencies {
 
 	//**database**
 	runtimeOnly 'mysql:mysql-connector-java:8.0.33'
+	implementation 'org.hibernate:hibernate-core:6.1.7.Final'
+	implementation 'org.hibernate:hibernate-spatial:6.1.7.Final' //mysql - 지도 데이터 사용하기 위한
 
 	//**lombok**
 	annotationProcessor 'org.projectlombok:lombok'

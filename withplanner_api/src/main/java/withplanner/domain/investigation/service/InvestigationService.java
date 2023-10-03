@@ -54,7 +54,7 @@ public class InvestigationService {
         investigationReposiotory.save(investigation);
         //연관관계 매핑
         user.addRecommend(response);
-        user.addInvestigation(investigation);
+        user.addInvestigation(investigation.getId());
 
         return new ResultMsgResp("설문조사에 응해주셔서 감사합니다.", true);
     }
