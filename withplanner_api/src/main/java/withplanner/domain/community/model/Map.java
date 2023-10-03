@@ -1,7 +1,10 @@
 package withplanner.domain.community.model;
 
+import io.jsonwebtoken.lang.Assert;
 import jakarta.persistence.*;
 import lombok.*;
+import org.geolatte.geom.Geometry;
+import org.locationtech.jts.geom.Point;
 import withplanner.global.entity.BaseTimeEntity;
 
 
@@ -14,9 +17,10 @@ public class Map extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Coordinate coordinate;
-
     private String alias; //별칭
+
+    @Column(nullable = false, columnDefinition = "GEOMETRY")
+    private Point coordinate; //위경도
 
     private String name; //상호명 (ex. 성신여자대학교 수정관)
 
@@ -28,7 +32,9 @@ public class Map extends BaseTimeEntity {
     }
 
     @Builder
-    public Map(Coordinate coordinate, String alias, String name){
+    public Map(Point coordinate, String alias, String name){
+        Assert.notNull(coordinate,"좌표정보는 null값이 들어올 수 없습니다.");
+
         this.coordinate = coordinate;
         this.alias = alias;
         this.name = name;
