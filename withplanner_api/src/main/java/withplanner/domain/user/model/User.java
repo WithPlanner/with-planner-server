@@ -5,9 +5,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import withplanner.domain.post.model.Post;
 import withplanner.global.entity.BaseTimeEntity;
-import withplanner.domain.investigation.model.Investigation;
 import withplanner.global.entity.Status;
 import withplanner.global.dto.UserRequestDto;
 
@@ -17,7 +15,7 @@ import java.util.stream.Collectors;
 @Entity
 @Getter
 @Builder
-@Table(name ="users")
+@Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class User extends BaseTimeEntity implements UserDetails {
@@ -57,7 +55,7 @@ public class User extends BaseTimeEntity implements UserDetails {
     //UserDetails 구현체 관련 코드 - 필수
     @ElementCollection(fetch = FetchType.EAGER) // 수정필요!
     @CollectionTable(joinColumns = @JoinColumn(name = "user_idx"))
-    @Column(name="role")
+    @Column(name = "role")
     private List<String> roles = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "user")
@@ -78,47 +76,48 @@ public class User extends BaseTimeEntity implements UserDetails {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
+
     @Override
     public String getPassword() {
         return null;
     }
+
     @Override
     public String getUsername() {
         return email;
     }
+
     @Override
     public boolean isAccountNonExpired() {
         return false;
     }
+
     @Override
     public boolean isAccountNonLocked() {
         return false;
     }
+
     @Override
     public boolean isCredentialsNonExpired() {
         return false;
     }
+
     @Override
     public boolean isEnabled() {
         return false;
     }
 
-//    public void addCommunity(Community community) {
-//        communities.add(community);
-//        //community.addUser(this); //양방향으로 매핑하면 주석 풀면 됩니다. 안할거면 삭제해도 무방
-//    }
-
-    public void addPost(Post post) {
-        //posts.add(post);
-//        post.addUser(this); //양방향으로 매핑하면 주석 풀면 됩니다. 안할거면 삭제해도 무방
-    }
-
     public void addInvestigation(Long investigationId) {
         this.investigationId = investigationId;
     }
+
     public void addRecommend(String category) {
         this.recommend = category;
     }
 
+    //    public void addCommunity(Community community) {
+//        communities.add(community);
+//        //community.addUser(this); //양방향으로 매핑하면 주석 풀면 됩니다. 안할거면 삭제해도 무방
+//    }
 
 }
