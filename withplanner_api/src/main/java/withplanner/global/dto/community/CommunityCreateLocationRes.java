@@ -19,10 +19,10 @@ public class CommunityCreateLocationRes {
     static public CommunityCreateLocationRes toDto(Map map){
         return CommunityCreateLocationRes.builder()
                 .mapId(map.getId())
-                .longitude(map.getX())
-                .latitude(map.getY())
-                .roadAddress(map.getLocation().getRoadAddress())
-                .address(map.getLocation().getAddress())
+                .longitude(map.getCoordinate().getLongitude())
+                .latitude(map.getCoordinate().getLatitude())
+//                .roadAddress(map.getLocation().getRoadAddress())
+//                .address(map.getLocation().getAddress())
                 .alias(map.getAlias())
                 .name(map.getName())
                 .build();

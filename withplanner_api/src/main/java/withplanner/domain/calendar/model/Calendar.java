@@ -23,10 +23,7 @@ public class Calendar extends BaseTimeEntity {
 
     private String day;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    private Long userId;
 
-    @JoinColumn(name = "community_id")
     private Long communityId;
 }
