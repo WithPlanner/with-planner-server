@@ -49,10 +49,6 @@ public class Community extends BaseTimeEntity {
 
     private Boolean isLocationAuthenticationRequired;
 
-//    //todo : 논의할 부분 : 양방향임
-//    @OneToMany(mappedBy = "community")
-//    private List<CommunityMember> communityMembers= new ArrayList<>();
-
     private LocalDateTime finishDate; //커뮤니티 인증 종료 날짜
 
     private Boolean isPublic; //공개 비공개 여부
@@ -104,9 +100,4 @@ public class Community extends BaseTimeEntity {
         //posts.add(post);
         //post.addCommunity(this);
     }
-
-//    public void addCommunityMember(CommunityMember communityMember) {
-//        communityMembers.add(communityMember);
-//    }
-
 }
