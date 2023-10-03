@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="withplanner_db@withplanner.cczf7jk4nliu.ap-northeast-2.rds.amazonaws.com" uuid="09fbb682-12f3-4a4d-81f6-b1807c1dd920">
+    <data-source source="LOCAL" name="withplanner@localhost" uuid="df9c06ad-6413-4e77-88ad-1e5147419ce3">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://withplanner.cczf7jk4nliu.ap-northeast-2.rds.amazonaws.com:3306/withplanner_db</jdbc-url>
+      <jdbc-url>jdbc:mysql://localhost:3306/withplanner</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
